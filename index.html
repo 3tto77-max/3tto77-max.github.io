@@ -292,6 +292,10 @@
       <label>عنوان البث</label>
       <input id="title" value="بث مباشر" placeholder="أدخل عنوان البث">
       
+      <label>User-Agent (اختياري)</label>
+      <input id="useragent" placeholder="مثال: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36">
+      <small>يستخدم لتحديد المتصفح أو التطبيق الذي يطلب البث</small>
+      
       <label>المرجع (Referer)</label>
       <input id="referer" placeholder="https://example.com">
       
@@ -364,6 +368,7 @@
 
       add("url", urlValue);
       add("title", document.getElementById("title").value);
+      add("useragent", document.getElementById("useragent").value);
       add("referer", document.getElementById("referer").value);
       add("cookie", document.getElementById("cookie").value);
       add("origin", document.getElementById("origin").value);
