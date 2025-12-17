@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.playking.app",
+      "sha256_cert_fingerprints": [
+        "42:DB:84:27:FA:24:D0:A6:BC:5A:55:DA:3E:0F:24:39:57:0F:E9:6D:CD:1F:14:ED:56:51:3A:2F:DD:09:CD:04"
+      ]
+    }
+  }
+]
