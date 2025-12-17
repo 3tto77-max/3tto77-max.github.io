@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>PlayKing - مولّد روابط</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 520px;
+      background: #020617;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.5);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    p {
+      text-align: center;
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+
+    input, select {
+      width: 100%;
+      margin-top: 6px;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #1e293b;
+      background: #020617;
+      color: #f8fafc;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .generate { background: #2563eb; color: #fff; }
+    .copy     { background: #059669; color: #fff; }
+    .open     { background: #7c3aed; color: #fff; }
+
+    pre {
+      margin-top: 20px;
+      background: #020617;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #1e293b;
+      font-size: 13px;
+      word-break: break-all;
+      min-height: 60px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h1>🎬 PlayKing</h1>
+  <p>مولّد روابط يفتح التطبيق مباشرة</p>
+
+  <label>رابط البث *</label>
+  <input id="url" placeholder="https://example.com/stream.mpd">
+
+  <label>العنوان</label>
+  <input id="title" value="بث مباشر">
+
+  <label>نظام الحماية</label>
+  <select id="scheme">
+    <option value="">بدون</option>
+    <option value="clearkey" selected>ClearKey</option>
+    <option value="widevine">Widevine</option>
+  </select>
+
+  <label>المفتاح / الرخصة</label>
+  <input id="key" placeholder="keyId:keyValue">
+
+  <button class="generate" onclick="generate()">⚡ توليد الرابط</button>
+  <button class="copy" onclick="copyLink()">📋 نسخ</button>
+  <button class="open" onclick="openApp()">🚀 فتح التطبيق</button>
+
+  <pre id="result">سيظهر الرابط هنا...</pre>
+</div>
+
+<script>
+  let generatedLink = "";
+
+  function generate() {
+    const base = "https://3tto77-max.github.io/play/?";
+    const params = [];
+
+    function add(name, value) {
+      if (value && value.trim() !== "") {
+        params.push(name + "=" + encodeURIComponent(value.trim()));
+      }
+    }
+
+    const url = document.getElementById("url").value;
+    if (!url) {
+      alert("أدخل رابط البث");
+      return;
+    }
+
+    add("url", url);
+    add("title", document.getElementById("title").value);
+    add("scheme", document.getElementById("scheme").value);
+    add("key", document.getElementById("key").value);
+
+    generatedLink = base + params.join("&");
+    document.getElementById("result").textContent = generatedLink;
+  }
+
+  function copyLink() {
+    if (!generatedLink) return alert("ولّد الرابط أولاً");
+    navigator.clipboard.writeText(generatedLink);
+    alert("تم النسخ");
+  }
+
+  function openApp() {
+    if (!generatedLink) return alert("ولّد الرابط أولاً");
+    window.location.href = generatedLink;
+  }
+</script>
+
+</body>
+</html>
