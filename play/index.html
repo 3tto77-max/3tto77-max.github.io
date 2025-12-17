@@ -47,14 +47,16 @@
 </div>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
+  // الرابط الحالي (App Link)
   const deepLink = window.location.href;
 
-  // محاولة فتح التطبيق
-  window.location.replace(deepLink);
-
-  // رابط احتياطي
+  // زر احتياطي
   document.getElementById("openLink").href = deepLink;
+
+  // محاولة فتح التطبيق (مرة واحدة)
+  setTimeout(() => {
+    window.location.href = deepLink;
+  }, 300);
 </script>
 
 </body>
