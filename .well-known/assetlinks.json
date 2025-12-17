@@ -5,7 +5,8 @@
       "namespace": "android_app",
       "package_name": "com.playking.app",
       "sha256_cert_fingerprints": [
-        "42DB8427FA24D0A6BC5A55DA3E0F2439570FE96DCD1F14ED56513A2FDD09CD04"
+        "42:DB:84:27:FA:24:D0:A6:BC:5A:55:DA:3E:0F:24:39:57:0F:E9:6D:CD:1F:14:ED:56:51:3A:2F:DD:09:CD:04",
+        "12:0A:DA:92:C5:D7:5D:48:BB:43:4F:A5:4D:FF:00:BF:14:1E:3B:30:3E:95:30:D7:A9:1E:7F:47:BD:E1:77:FA"
       ]
     }
   }
