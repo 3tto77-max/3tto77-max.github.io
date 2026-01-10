@@ -1,15 +1,19 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
-// إعداد الاتصال بـ Supabase
+// وضعنا القيم مباشرة هنا لحل مشكلة Build Failed
 const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
+  'https://dxajdlqhledskrmiyyop.supabase.co',
+  'sb_publishable_Zom1Aiy9XoJzYr1-xD9DSA_OHD9fIs3'
 );
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const slug = searchParams.get('slug'); // استلام الكود المرسل من سكتشوير
+  const slug = searchParams.get('slug'); 
+
+  if (!slug) {
+    return NextResponse.json({ status: "error", message: "Missing slug parameter" });
+  }
 
   // جلب بيانات الرابط من القاعدة
   const { data, error } = await supabase
@@ -34,5 +38,7 @@ export async function GET(request) {
   return NextResponse.json({ 
     status: "active", 
     url: data.original_url 
+  });
+}
   });
 }
