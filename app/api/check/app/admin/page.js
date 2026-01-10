@@ -4,9 +4,10 @@ import { createClient } from '@supabase/supabase-js';
 
 // إعداد الاتصال باستخدام القيم التي أضفتها في Vercel
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL, 
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  'https://dxajdlqhledskrmiyyop.supabase.co',
+  'sb_publishable_Zom1Aiy9XoJzYr1-xD9DSA_OHD9fIs3'
 );
+
 
 export default function AdminPanel() {
   const [url, setUrl] = useState('');
