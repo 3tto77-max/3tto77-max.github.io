@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>PlayKing Generator</title>
+<title>PlayKing AES Generator</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -42,11 +42,14 @@ button{
   min-height:60px;
 }
 </style>
+
+<!-- CryptoJS (AES + SHA256 + PKCS7) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 
 <body>
 
-<h2>🎬 PlayKing – مولّد روابط</h2>
+<h2>🎬 PlayKing – AES مولّد روابط</h2>
 
 <label>رابط البث *</label>
 <input id="url" placeholder="https://example.com/stream.m3u8">
@@ -87,18 +90,8 @@ button{
 <div id="result">سيظهر الرابط هنا…</div>
 
 <script>
-// =====================
-// 🔐 XOR + Base64
-// =====================
-function xorEncrypt(text, key) {
-  let out = "";
-  for (let i = 0; i < text.length; i++) {
-    out += String.fromCharCode(
-      text.charCodeAt(i) ^ key.charCodeAt(i % key.length)
-    );
-  }
-  return btoa(out);
-}
+const SECRET_KEY = "3tto_key"; // 🔐 نفس مفتاح ApiActivity
+const IV = CryptoJS.enc.Hex.parse("00000000000000000000000000000000");
 
 let finalLink = "";
 
@@ -110,7 +103,6 @@ function generate() {
     return;
   }
 
-  // إصلاح تلقائي للرابط
   if (!url.startsWith("http://") && !url.startsWith("https://")) {
     url = "https://" + url;
   }
@@ -127,8 +119,20 @@ function generate() {
     exp: Date.now() + (parseInt(document.getElementById("minutes").value || 5) * 60000)
   };
 
-  const SECRET_KEY = "3tto_key"; // نفس مفتاح التطبيق
-  const encrypted = xorEncrypt(JSON.stringify(payload), SECRET_KEY);
+  const json = JSON.stringify(payload);
+
+  // 🔐 SHA-256 key (نفس AESCrypt)
+  const aesKey = CryptoJS.SHA256(SECRET_KEY);
+
+  const encrypted = CryptoJS.AES.encrypt(
+    json,
+    aesKey,
+    {
+      iv: IV,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+    }
+  ).toString();
 
   finalLink =
     "https://3tto77-max.github.io/play/?data=" +
