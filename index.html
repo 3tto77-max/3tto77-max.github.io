@@ -1,106 +1,151 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>PlayKing</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>PlayKing Links - مولّد روابط احترافي</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      background: #0f172a;
-      color: #fff;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      text-align: center;
-    }
-    .box {
-      max-width: 320px;
-    }
-    .spinner {
-      margin: 20px auto;
-      width: 40px;
-      height: 40px;
-      border: 4px solid #334155;
-      border-top: 4px solid #22c55e;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    a {
-      color: #22c55e;
-      text-decoration: none;
-    }
-  </style>
+<style>
+/* ==== نفس تصميمك بدون تغيير ==== */
+:root {
+  --bg:#0a0e17;--card:#0f1525;--input:#1a2236;
+  --accent:#3b82f6;--accent2:#10b981;--accent3:#8b5cf6;
+  --text:#f8fafc;--muted:#94a3b8;--border:#2d3748;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:20px;font-family:system-ui;
+  background:linear-gradient(135deg,#0a0e17,#0f172a);
+  color:var(--text);min-height:100vh;display:flex;
+  justify-content:center;align-items:center;
+}
+.container{
+  width:100%;max-width:800px;background:var(--card);
+  border-radius:24px;padding:30px;border:1px solid var(--border);
+}
+h1{text-align:center;color:#3b82f6}
+label{margin-top:14px;display:block}
+input,select{
+  width:100%;padding:14px;border-radius:12px;
+  border:2px solid var(--border);background:var(--input);
+  color:white;margin-top:6px;
+}
+button{
+  padding:15px;border:none;border-radius:12px;
+  font-weight:bold;cursor:pointer;margin-top:20px;
+}
+.generate{background:#3b82f6;color:white}
+.copy{background:#10b981;color:white}
+.open{background:#8b5cf6;color:white}
+.result{
+  margin-top:20px;background:#000;padding:15px;
+  border-radius:10px;font-family:monospace;word-break:break-all
+}
+</style>
 </head>
-<body>
 
-<div class="box">
-  <h2>جاري فتح التطبيق…</h2>
-  <div class="spinner"></div>
-  <p>إذا لم يفتح تلقائيًا، <a id="openLink" href="#">اضغط هنا</a></p>
+<body>
+<div class="container">
+
+<h1>🎬 PlayKing مولّد الروابط</h1>
+
+<label>رابط البث *</label>
+<input id="url" placeholder="https://example.com/stream.m3u8">
+
+<label>عنوان البث</label>
+<input id="title" value="بث مباشر">
+
+<label>مدة الصلاحية (بالدقائق)</label>
+<input id="minutes" type="number" value="5">
+
+<label>Scheme (DRM)</label>
+<select id="scheme">
+  <option value="">بدون</option>
+  <option value="clearkey">ClearKey</option>
+  <option value="widevine">Widevine</option>
+  <option value="playready">PlayReady</option>
+</select>
+
+<label>Key / License</label>
+<input id="key">
+
+<label>User-Agent</label>
+<input id="useragent">
+
+<label>Referer</label>
+<input id="referer">
+
+<label>Cookie</label>
+<input id="cookie">
+
+<label>Origin</label>
+<input id="origin">
+
+<button class="generate" onclick="generate()">⚡ توليد الرابط</button>
+<button class="copy" onclick="copyLink()">📋 نسخ</button>
+<button class="open" onclick="openApp()">🚀 فتح</button>
+
+<div id="result" class="result">سيظهر الرابط هنا</div>
+
 </div>
 
 <script>
 /* ================================
-   🔐 تشفير XOR + Base64
+   🔐 XOR + Base64 Encryption
 ================================ */
-function xorEncrypt(text, key) {
-  let result = '';
-  for (let i = 0; i < text.length; i++) {
-    result += String.fromCharCode(
-      text.charCodeAt(i) ^ key.charCodeAt(i % key.length)
+function xorEncrypt(text, key){
+  let out='';
+  for(let i=0;i<text.length;i++){
+    out+=String.fromCharCode(
+      text.charCodeAt(i)^key.charCodeAt(i%key.length)
     );
   }
-  return btoa(result);
+  return btoa(out);
 }
 
-/* ================================
-   🚀 التنفيذ
-================================ */
-(function () {
+let generatedLink="";
 
-  const params = new URLSearchParams(window.location.search);
-  const streamUrl = params.get("url");
+function generate(){
 
-  if (!streamUrl) {
-    document.querySelector("h2").innerText = "رابط غير صالح";
-    return;
-  }
+  const url=document.getElementById("url").value.trim();
+  if(!url){alert("أدخل رابط البث");return;}
 
-  // ⏱ مدة الصلاحية (بالدقائق)
-  const DURATION_MINUTES = 5;
+  const title=document.getElementById("title").value.trim();
+  const scheme=document.getElementById("scheme").value;
+  const key=document.getElementById("key").value.trim();
+  const useragent=document.getElementById("useragent").value.trim();
+  const referer=document.getElementById("referer").value.trim();
+  const cookie=document.getElementById("cookie").value.trim();
+  const origin=document.getElementById("origin").value.trim();
 
-  // 🔐 مفتاح التشفير (نفسه في التطبيق)
-  const SECRET_KEY = "3tto_key";
+  const minutes=parseInt(document.getElementById("minutes").value||5);
+  const expire=Date.now()+(minutes*60*1000);
 
-  // ⏰ وقت الانتهاء
-  const expireTime = Date.now() + (DURATION_MINUTES * 60 * 1000);
+  /* payload النهائي */
+  const payload=JSON.stringify({
+    url,title,scheme,key,useragent,referer,cookie,origin,exp:expire
+  });
 
-  // payload = url|expire
-  const payload = streamUrl + "|" + expireTime;
+  const SECRET_KEY="3tto_key"; // 🔐 نفس مفتاح التطبيق
+  const encrypted=xorEncrypt(payload,SECRET_KEY);
 
-  // 🔒 تشفير
-  const encrypted = xorEncrypt(payload, SECRET_KEY);
+  generatedLink=
+   "https://3tto77-max.github.io/play/?data="
+   +encodeURIComponent(encrypted);
 
-  // 🔗 Deep Link (عدّل المخطط حسب تطبيقك)
-  const appLink = "myapp://play?data=" + encodeURIComponent(encrypted);
+  document.getElementById("result").textContent=generatedLink;
+}
 
-  // زر احتياطي
-  document.getElementById("openLink").href = appLink;
+function copyLink(){
+  if(!generatedLink){alert("ولّد الرابط أولاً");return;}
+  navigator.clipboard.writeText(generatedLink);
+  alert("تم النسخ ✅");
+}
 
-  // محاولة فتح التطبيق تلقائيًا
-  setTimeout(() => {
-    window.location.href = appLink;
-  }, 300);
-
-})();
+function openApp(){
+  if(!generatedLink){alert("ولّد الرابط أولاً");return;}
+  window.open(generatedLink,"_blank");
+}
 </script>
-
 </body>
 </html>
