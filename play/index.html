@@ -47,16 +47,59 @@
 </div>
 
 <script>
-  // الرابط الحالي (App Link)
-  const deepLink = window.location.href;
+/* ================================
+   🔐 تشفير XOR + Base64
+================================ */
+function xorEncrypt(text, key) {
+  let result = '';
+  for (let i = 0; i < text.length; i++) {
+    result += String.fromCharCode(
+      text.charCodeAt(i) ^ key.charCodeAt(i % key.length)
+    );
+  }
+  return btoa(result);
+}
+
+/* ================================
+   🚀 التنفيذ
+================================ */
+(function () {
+
+  const params = new URLSearchParams(window.location.search);
+  const streamUrl = params.get("url");
+
+  if (!streamUrl) {
+    document.querySelector("h2").innerText = "رابط غير صالح";
+    return;
+  }
+
+  // ⏱ مدة الصلاحية (بالدقائق)
+  const DURATION_MINUTES = 5;
+
+  // 🔐 مفتاح التشفير (نفسه في التطبيق)
+  const SECRET_KEY = "3tto_key";
+
+  // ⏰ وقت الانتهاء
+  const expireTime = Date.now() + (DURATION_MINUTES * 60 * 1000);
+
+  // payload = url|expire
+  const payload = streamUrl + "|" + expireTime;
+
+  // 🔒 تشفير
+  const encrypted = xorEncrypt(payload, SECRET_KEY);
+
+  // 🔗 Deep Link (عدّل المخطط حسب تطبيقك)
+  const appLink = "myapp://play?data=" + encodeURIComponent(encrypted);
 
   // زر احتياطي
-  document.getElementById("openLink").href = deepLink;
+  document.getElementById("openLink").href = appLink;
 
-  // محاولة فتح التطبيق (مرة واحدة)
+  // محاولة فتح التطبيق تلقائيًا
   setTimeout(() => {
-    window.location.href = deepLink;
+    window.location.href = appLink;
   }, 300);
+
+})();
 </script>
 
 </body>
