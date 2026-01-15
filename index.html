@@ -1,8 +1,7 @@
-<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>PlayKing Links - مولّد روابط احترافي</title>
+  <title>Vexo Player - مولّد روابط احترافي</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
@@ -86,6 +85,46 @@
     .logo {
       font-size: 48px;
       margin-bottom: 10px;
+      color: #3b82f6;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .brand-icon {
+      font-size: 42px;
+      background: var(--accent-gradient);
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .brand-text {
+      text-align: right;
+    }
+
+    .brand-name {
+      font-size: 28px;
+      font-weight: 700;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .brand-tagline {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 4px;
     }
 
     .section {
@@ -262,6 +301,21 @@
         font-size: 26px;
       }
       
+      .brand {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .brand-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 32px;
+      }
+      
+      .brand-name {
+        font-size: 24px;
+      }
+      
       .buttons {
         flex-direction: column;
       }
@@ -279,9 +333,15 @@
 <body>
   <div class="container">
     <div class="header">
-      <div class="logo">🎬</div>
-      <h1>PlayKing مولّد الروابط</h1>
-      <div class="subtitle">أنشئ روابط تشغيل مخصصة للتطبيق بسهولة</div>
+      <div class="brand">
+        <div class="brand-icon">🎬</div>
+        <div class="brand-text">
+          <div class="brand-name">Vexo Player</div>
+          <div class="brand-tagline">مولّد روابط تشغيل ذكي</div>
+        </div>
+      </div>
+      <h1>مولّد روابط Vexo Player</h1>
+      <div class="subtitle">أنشئ روابط تشغيل مخصصة للتطبيق بسهولة وأمان</div>
     </div>
     
     <label class="required">رابط البث (URL)</label>
@@ -342,7 +402,7 @@
     </div>
     
     <div class="footer">
-      © 2023 PlayKing مولّد الروابط | إصدار 2.0 | النطاق: 3tto77-max.github.io
+      © 2024 Vexo Player | إصدار 3.0 | النطاق: vexoplayer.github.io
     </div>
   </div>
 
@@ -350,7 +410,7 @@
     let generatedLink = "";
 
     function generate() {
-      const base = "https://3tto77-max.github.io/play/?";
+      const base = "https://vexoplayer.github.io/play/?";
       const params = [];
 
       function add(name, value) {
