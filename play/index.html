@@ -75,7 +75,7 @@ background:rgba(15,23,42,.6);
 border:1px solid var(--border);
 border-radius:16px;
 padding:20px;
-margin-bottom:25px;
+margin-bottom:20px;
 }
 
 .loader{
@@ -96,6 +96,12 @@ animation:bounce 1.2s infinite ease-in-out;
 @keyframes bounce{
 0%,80%,100%{transform:scale(1)}
 40%{transform:scale(1.6)}
+}
+
+.notice{
+font-size:14px;
+color:var(--muted);
+margin-bottom:18px;
 }
 
 .buttons{
@@ -157,14 +163,21 @@ color:var(--muted);
 <div class="loader">
 <span></span><span></span><span></span>
 </div>
-<p style="font-size:14px;color:var(--muted)">
-إذا لم يفتح الرابط تلقائيًا، قم بتثبيت التطبيق
+
+<p class="notice">
+⚠️ إذا لم يفتح الرابط تلقائيًا  
+فعّل خيار <b>فتح الروابط المدعومة</b> للتطبيق
 </p>
+
+<button class="btn btn-yellow" onclick="openDefaultSettings()">
+<i class="fas fa-cog"></i>
+تفعيل فتح الروابط
+</button>
 </div>
 
 <div class="buttons">
 
-<button class="btn btn-yellow" onclick="copyLink()">
+<button class="btn btn-outline" onclick="copyLink()">
 <i class="fas fa-copy"></i>
 نسخ رابط التشغيل
 </button>
@@ -205,6 +218,14 @@ window.open(
 
 function downloadTelegram(){
 window.open("https://t.me/VexoPlayer","_blank");
+}
+
+// فتح إعدادات فتح الروابط المدعومة
+function openDefaultSettings(){
+window.location.href =
+"intent://settings#Intent;" +
+"action=android.settings.APP_OPEN_BY_DEFAULT_SETTINGS;" +
+"end";
 }
 </script>
 
