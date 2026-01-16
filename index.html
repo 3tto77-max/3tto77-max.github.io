@@ -745,15 +745,15 @@
             }
 
             // Add all parameters (matching original structure)
-            addParam('url', urlValue);
-            addParam('title', document.getElementById('title').value);
-            addParam('useragent', document.getElementById('useragent').value);
-            addParam('referer', document.getElementById('referer').value);
-            addParam('cookie', document.getElementById('cookie').value);
-            addParam('origin', document.getElementById('origin').value);
-            addParam('scheme', document.getElementById('scheme').value);
-            addParam('key', document.getElementById('key').value);
-
+            // Add all parameters (URL LAST)
+addParam('title', document.getElementById('title').value);
+addParam('useragent', document.getElementById('useragent').value);
+addParam('referer', document.getElementById('referer').value);
+addParam('cookie', document.getElementById('cookie').value);
+addParam('origin', document.getElementById('origin').value);
+addParam('scheme', document.getElementById('scheme').value);
+addParam('key', document.getElementById('key').value);
+addParam('url', urlValue); // ✅ آخر شيء
             // Generate final link
             generatedLink = base + params.join('&');
             document.getElementById('result').textContent = generatedLink;
