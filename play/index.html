@@ -158,7 +158,7 @@ color:var(--muted);
 <span></span><span></span><span></span>
 </div>
 <p style="font-size:14px;color:var(--muted)">
-اضغط على زر فتح التطبيق أو انسخ الرابط
+اضغط على فتح التطبيق أو قم بتحميل المشغل
 </p>
 </div>
 
@@ -170,16 +170,16 @@ color:var(--muted);
 فتح في Vexo Player
 </button>
 
-<!-- نسخ الرابط -->
-<button class="btn btn-outline" onclick="copyLink()">
-<i class="fas fa-copy"></i>
-نسخ رابط التشغيل
+<!-- تحميل من MediaFire -->
+<button class="btn btn-outline" onclick="downloadMediafire()">
+<i class="fas fa-download"></i>
+تحميل التطبيق (MediaFire)
 </button>
 
-<!-- تحميل التطبيق -->
-<button class="btn btn-outline" onclick="downloadApp()">
-<i class="fas fa-download"></i>
-تحميل Vexo Player
+<!-- تحميل من تيليجرام -->
+<button class="btn btn-outline" onclick="downloadTelegram()">
+<i class="fab fa-telegram"></i>
+تحميل من تيليجرام
 </button>
 
 </div>
@@ -199,16 +199,18 @@ function openApp(){
     window.location.href = link;
 }
 
-// نسخ الرابط
-function copyLink(){
-    navigator.clipboard.writeText(link);
-    alert("تم نسخ رابط التشغيل ✅");
-}
-
-// تحميل التطبيق
-function downloadApp(){
+// تحميل من MediaFire
+function downloadMediafire(){
     window.open(
         "https://www.mediafire.com/file/5wtszrv23oxcx5j/VexoPlayer.apk/file",
+        "_blank"
+    );
+}
+
+// تحميل من تيليجرام
+function downloadTelegram(){
+    window.open(
+        "https://t.me/VexoPlayer",
         "_blank"
     );
 }
