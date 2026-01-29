@@ -153,33 +153,30 @@ color:var(--muted);
 <div class="subtitle">مشغل الوسائط الاحترافي</div>
 
 <div class="box">
-<strong>الرابط جاهز للتشغيل داخل التطبيق</strong>
+<strong>جاري فتح الرابط داخل التطبيق...</strong>
 <div class="loader">
 <span></span><span></span><span></span>
 </div>
 <p style="font-size:14px;color:var(--muted)">
-اضغط على فتح التطبيق أو قم بتحميل المشغل
+إذا لم يفتح تلقائيًا، استخدم الأزرار بالأسفل
 </p>
 </div>
 
 <div class="buttons">
 
-<!-- فتح التطبيق -->
 <button class="btn btn-yellow" onclick="openApp()">
-<i class="fas fa-play-circle"></i>
-فتح في Vexo Player
+<i class="fas fa-play"></i>
+فتح في التطبيق
 </button>
 
-<!-- تحميل من MediaFire -->
-<button class="btn btn-outline" onclick="downloadMediafire()">
-<i class="fas fa-download"></i>
-تحميل التطبيق (MediaFire)
-</button>
-
-<!-- تحميل من تيليجرام -->
 <button class="btn btn-outline" onclick="downloadTelegram()">
 <i class="fab fa-telegram"></i>
-تحميل من تيليجرام
+تحميل التطبيق من تليجرام
+</button>
+
+<button class="btn btn-outline" onclick="copyLink()">
+<i class="fas fa-copy"></i>
+نسخ رابط التشغيل
 </button>
 
 </div>
@@ -192,28 +189,27 @@ color:var(--muted);
 </div>
 
 <script>
-const link = window.location.href;
+const params = window.location.search;
+const fullLink = "vexo://play" + params;
 
-// فتح التطبيق (App Links)
 function openApp(){
-    window.location.href = link;
+    window.location.href = fullLink;
+
+    setTimeout(()=>{
+        window.open("https://t.me/VexoPlayer","_blank");
+    },1500);
 }
 
-// تحميل من MediaFire
-function downloadMediafire(){
-    window.open(
-        "https://www.mediafire.com/file/5wtszrv23oxcx5j/VexoPlayer.apk/file",
-        "_blank"
-    );
-}
-
-// تحميل من تيليجرام
 function downloadTelegram(){
-    window.open(
-        "https://t.me/VexoPlayer",
-        "_blank"
-    );
+    window.open("https://t.me/VexoPlayer","_blank");
 }
+
+function copyLink(){
+    navigator.clipboard.writeText(fullLink);
+    alert("تم نسخ رابط التشغيل ✅");
+}
+
+setTimeout(openApp,800);
 </script>
 
 </body>
