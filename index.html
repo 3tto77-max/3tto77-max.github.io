@@ -16,6 +16,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 }
+
 .box{
 background:#1e293b;
 padding:25px;
@@ -24,17 +25,22 @@ width:95%;
 max-width:600px;
 box-shadow:0 20px 40px rgba(0,0,0,.5);
 }
-h1{color:#fbbf24;text-align:center;margin-bottom:20px}
+
+h1{color:#fbbf24;text-align:center;margin-bottom:15px}
+
 label{margin-top:12px;display:block}
+
 input,select{
 width:100%;
 padding:10px;
 border-radius:10px;
 border:none;
 margin-top:6px;
+font-size:14px;
 }
+
 button{
-margin-top:15px;
+margin-top:18px;
 width:100%;
 padding:14px;
 border-radius:14px;
@@ -44,6 +50,7 @@ font-weight:bold;
 background:#fbbf24;
 cursor:pointer;
 }
+
 textarea{
 margin-top:15px;
 width:100%;
@@ -54,11 +61,13 @@ border:none;
 border-radius:12px;
 padding:12px;
 font-size:12px;
+resize:none;
 }
 </style>
 </head>
 
 <body>
+
 <div class="box">
 
 <h1>Vexo Generator</h1>
@@ -74,8 +83,8 @@ font-size:12px;
 <option value="">بدون</option>
 </select>
 
-<label>Key</label>
-<input id="key" placeholder="keyId:keyValue">
+<label>Key (keyId:keyValue)</label>
+<input id="key" placeholder="ab12:cd34">
 
 <label>رابط الفيديو</label>
 <input id="url" placeholder="https://example.com/video.mpd">
@@ -89,13 +98,18 @@ font-size:12px;
 <script>
 function generate(){
 
-const t = encodeURIComponent(title.value);
-const s = scheme.value;
-const k = encodeURIComponent(key.value);
-const u = encodeURIComponent(url.value);
+const title = encodeURIComponent(document.getElementById("title").value.trim());
+const scheme = document.getElementById("scheme").value;
+const keyRaw = document.getElementById("key").value.trim();
+const key = encodeURIComponent(keyRaw);
+const url = encodeURIComponent(document.getElementById("url").value.trim());
 
 const intent =
-`intent://play?title=${t}${s?`&scheme=${s}`:""}${k?`&key=${k}`:""}&url=${u}#Intent;scheme=vexo;package=com.vexo.player;end`;
+`intent://play?title=${title}` +
+(scheme ? `&scheme=${scheme}` : ``) +
+(keyRaw ? `&key=${key}` : ``) +
+`&url=${url}` +
+`#Intent;scheme=vexo;package=com.vexo.player;end`;
 
 const html = `<!DOCTYPE html>
 <html lang="en">
@@ -113,6 +127,7 @@ align-items:center;
 justify-content:center;
 background:#000;
 }
+
 .play-button{
 background:#f7f7f7;
 border:none;
@@ -123,7 +138,10 @@ display:flex;
 align-items:center;
 justify-content:center;
 }
-.play-button:hover{background:#999;}
+
+.play-button:hover{
+background:#999;
+}
 </style>
 </head>
 
@@ -131,7 +149,7 @@ justify-content:center;
 
 <a href="${intent}">
 <button class="play-button">
-<svg fill="#000" height="80" width="80" viewBox="0 0 60 60">
+<svg fill="#000000" height="80" width="80" viewBox="0 0 60 60">
 <path d="M45.563,29.174l-22-15C22.205,14.289,22,14.629,22,15v30c0,.371.205.711.533.884a1 1 0 0 0 1.03-.058l22-15a1 1 0 0 0 0-1.652z"/>
 <path d="M30,0C13.458,0,0,13.458,0,30s13.458,30,30,30s30-13.458,30-30S46.542,0,30,0z"/>
 </svg>
@@ -139,7 +157,7 @@ justify-content:center;
 </a>
 
 <script>
-setTimeout(()=>{
+setTimeout(function(){
 location.href="${intent}";
 },800);
 </script>
@@ -147,9 +165,11 @@ location.href="${intent}";
 </body>
 </html>`;
 
-out.value =
-"🔗 Intent Link:\\n\\n" + intent +
-"\\n\\n=====================\\n\\n📄 HTML Page:\\n\\n" + html;
+document.getElementById("out").value =
+"🔗 Intent Link:\n\n" +
+intent +
+"\n\n========================\n\n📄 HTML Page:\n\n" +
+html;
 }
 </script>
 
