@@ -3,7 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vexo Player - بث مباشر</title>
+    <title>مولد صفحة Vexo HTML</title>
+    <style>
+        :root {
+            --primary: #f59e0b;
+            --dark: #0f172a;
+            --light: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 32px;
+        }
+
+        .generator {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--light);
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);
+            color: #0f172a;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .result {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            display: none;
+        }
+
+        .result h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #htmlOutput {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #fbbf24;
+            min-height: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .copy-btn {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .copy-btn:hover {
+            background: rgba(34, 197, 94, 0.3);
+        }
+
+        .download-btn {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .download-btn:hover {
+            background: rgba(59, 130, 246, 0.3);
+        }
+
+        .preview-btn {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .preview-btn:hover {
+            background: rgba(245, 158, 11, 0.3);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #64748b;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>مولد صفحة Vexo HTML</h1>
+            <p>أنشئ صفحة HTML جاهزة لفتح البث مباشرة في 3tto77-max.github.io</p>
+        </div>
+
+        <div class="generator">
+            <div class="form-group">
+                <label>عنوان البث</label>
+                <input type="text" id="title" value="بث مباشر" placeholder="أدخل عنوان البث">
+            </div>
+
+            <div class="form-group">
+                <label>نظام الحماية (Scheme)</label>
+                <input type="text" id="scheme" value="clearkey" placeholder="clearkey, widevine, playready">
+            </div>
+
+            <div class="form-group">
+                <label>المفتاح (Key)</label>
+                <input type="text" id="key" value="448128e485ef44d98024e7c5f3fa078b:a5759aeb79afae384819a20c481e2c4a" placeholder="keyId:keyValue">
+            </div>
+
+            <div class="form-group">
+                <label>رابط البث (URL)</label>
+                <input type="text" id="url" value="https://live-event-3-enc.edgenextcdn.net/out/v1/1117b28b859948afa6d5660460b392df/index.mpd" placeholder="https://example.com/stream.mpd">
+            </div>
+
+            <button class="btn" onclick="generateHTML()">
+                <i class="fas fa-code"></i>
+                توليد صفحة HTML
+            </button>
+
+            <div class="result" id="result">
+                <h3><i class="fas fa-file-code"></i> صفحة HTML الناتجة</h3>
+                <div id="htmlOutput"></div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn copy-btn" onclick="copyHTML()">
+                        <i class="fas fa-copy"></i>
+                        نسخ الكود
+                    </button>
+                    <button class="action-btn download-btn" onclick="downloadHTML()">
+                        <i class="fas fa-download"></i>
+                        تحميل HTML
+                    </button>
+                    <button class="action-btn preview-btn" onclick="previewHTML()">
+                        <i class="fas fa-eye"></i>
+                        معاينة
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2024 Vexo Player | متوافق مع https://3tto77-max.github.io/play/</p>
+            <p style="margin-top: 10px; font-size: 13px;">الصفحة المولدة ستفتح مباشرة في مشغل Vexo مع توجيه تلقائي</p>
+        </div>
+    </div>
+
+    <script>
+        let generatedHTML = '';
+
+        function generateHTML() {
+            const title = document.getElementById('title').value.trim() || 'بث مباشر';
+            const scheme = document.getElementById('scheme').value.trim() || 'clearkey';
+            const key = document.getElementById('key').value.trim();
+            const url = document.getElementById('url').value.trim();
+
+            if (!url) {
+                alert('يرجى إدخال رابط البث');
+                return;
+            }
+
+            // توليد رابط Vexo
+            const vexoLink = "https://3tto77-max.github.io/play/?" + 
+                `title=${encodeURIComponent(title)}` +
+                `&scheme=${scheme}` +
+                `&key=${encodeURIComponent(key)}` +
+                `&url=${encodeURIComponent(url)}`;
+
+            // إنشاء صفحة HTML كاملة
+            const htmlCode = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title} - Vexo Player</title>
     <meta name="description" content="استمتع بتشغيل الفيديو بجودة عالية عبر Vexo Player">
     <style>
         * {
@@ -141,21 +414,21 @@
     </style>
     
     <script>
-        // بيانات البث - يمكن تغييرها
+        // بيانات البث
         const streamData = {
-            title: "بث مباشر",
-            scheme: "clearkey",
-            key: "448128e485ef44d98024e7c5f3fa078b:a5759aeb79afae384819a20c481e2c4a",
-            url: "https://live-event-3-enc.edgenextcdn.net/out/v1/1117b28b859948afa6d5660460b392df/index.mpd"
+            title: "${title.replace(/"/g, '\\"')}",
+            scheme: "${scheme.replace(/"/g, '\\"')}",
+            key: "${key.replace(/"/g, '\\"')}",
+            url: "${url.replace(/"/g, '\\"')}"
         };
         
         // توليد رابط Vexo
         function generateVexoLink(data) {
             let link = "https://3tto77-max.github.io/play/?";
-            link += `title=${encodeURIComponent(data.title)}`;
-            link += `&scheme=${data.scheme}`;
-            link += `&key=${encodeURIComponent(data.key)}`;
-            link += `&url=${encodeURIComponent(data.url)}`;
+            link += "title=" + encodeURIComponent(data.title);
+            link += "&scheme=" + data.scheme;
+            link += "&key=" + encodeURIComponent(data.key);
+            link += "&url=" + encodeURIComponent(data.url);
             return link;
         }
         
@@ -167,14 +440,15 @@
             
             const timer = setInterval(function() {
                 countdown--;
-                countdownElement.textContent = countdown;
+                if (countdownElement) countdownElement.textContent = countdown;
                 
                 if (countdown <= 0) {
                     clearInterval(timer);
-                    loadingElement.style.display = 'block';
-                    loadingElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التوجيه...';
+                    if (loadingElement) {
+                        loadingElement.style.display = 'block';
+                        loadingElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التوجيه...';
+                    }
                     
-                    // فتح الرابط في نافذة جديدة
                     setTimeout(function() {
                         window.location.href = link;
                     }, 1000);
@@ -185,18 +459,24 @@
         // عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
             const vexoLink = generateVexoLink(streamData);
-            document.getElementById('streamUrl').textContent = streamData.url;
+            const streamUrlElement = document.getElementById('streamUrl');
+            const playBtn = document.getElementById('playBtn');
             
-            // إعداد زر التشغيل
-            document.getElementById('playBtn').onclick = function() {
-                clearTimeout(window.redirectTimeout);
-                window.location.href = vexoLink;
-            };
+            if (streamUrlElement) {
+                streamUrlElement.textContent = streamData.url;
+            }
+            
+            if (playBtn) {
+                playBtn.onclick = function() {
+                    if (window.redirectTimeout) clearTimeout(window.redirectTimeout);
+                    window.location.href = vexoLink;
+                };
+            }
             
             // بدء التوجيه التلقائي
             startAutoRedirect(vexoLink);
         });
-    </script>
+    <\/script>
 </head>
 <body>
     <div class="container">
@@ -204,7 +484,7 @@
             <i class="fas fa-play-circle"></i>
         </div>
         
-        <h1 id="streamTitle">بث مباشر</h1>
+        <h1>${title}</h1>
         <p class="subtitle">جاهز للتشغيل عبر Vexo Player</p>
         
         <div class="auto-redirect">
@@ -223,19 +503,61 @@
         
         <div class="info">
             <p><i class="fas fa-info-circle"></i> رابط البث:</p>
-            <div class="url-box" id="streamUrl">
-                <!-- سيتم تعبئة رابط البث هنا -->
-            </div>
+            <div class="url-box" id="streamUrl"></div>
         </div>
         
-        <div id="loading" class="loading">
-            <i class="fas fa-spinner fa-spin"></i> جاري تحميل البث...
-        </div>
+        <div id="loading" class="loading"></div>
         
         <div class="footer">
             <p>© 2024 Vexo Player | Powered by 3tto77-max.github.io</p>
         </div>
     </div>
+    
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"><\/script>
+</body>
+</html>`;
+
+            generatedHTML = htmlCode;
+            document.getElementById('htmlOutput').textContent = htmlCode;
+            document.getElementById('result').style.display = 'block';
+            
+            // التمرير إلى النتيجة
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyHTML() {
+            if (!generatedHTML) return;
+            
+            navigator.clipboard.writeText(generatedHTML).then(() => {
+                alert('تم نسخ كود HTML إلى الحافظة!');
+            });
+        }
+
+        function downloadHTML() {
+            if (!generatedHTML) return;
+            
+            const title = document.getElementById('title').value.trim() || 'vexo-player';
+            const blob = new Blob([generatedHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            a.href = url;
+            a.download = `${title}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function previewHTML() {
+            if (!generatedHTML) return;
+            
+            const previewWindow = window.open();
+            previewWindow.document.write(generatedHTML);
+            previewWindow.document.close();
+        }
+    </script>
     
     <!-- Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
