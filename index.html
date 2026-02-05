@@ -1,374 +1,96 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vexo Generator</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-        
-        body {
-            background: #0f172a;
-            color: white;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(245, 158, 11, 0.1);
-            border-radius: 10px;
-        }
-        
-        h1 {
-            color: #f59e0b;
-            margin-bottom: 5px;
-        }
-        
-        .section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .section-title {
-            color: #f59e0b;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #ccc;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            color: white;
-        }
-        
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 10px 0;
-        }
-        
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .generate-btn {
-            background: linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);
-            color: black;
-            border: none;
-            padding: 15px 30px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            margin: 20px 0;
-        }
-        
-        .result {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-            display: none;
-        }
-        
-        .result h3 {
-            color: #f59e0b;
-            margin-bottom: 15px;
-        }
-        
-        textarea {
-            width: 100%;
-            height: 150px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid #f59e0b;
-            border-radius: 5px;
-            padding: 10px;
-            color: #fbbf24;
-            font-family: monospace;
-            resize: vertical;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .action-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .copy-btn {
-            background: rgba(34, 197, 94, 0.2);
-            color: #4ade80;
-        }
-        
-        .test-btn {
-            background: rgba(245, 158, 11, 0.2);
-            color: #f59e0b;
-        }
+        body { padding: 20px; font-family: Arial; }
+        input, textarea { width: 100%; padding: 10px; margin: 5px 0; }
+        button { padding: 10px 20px; background: orange; color: black; border: none; margin: 10px; }
+        .result { margin-top: 20px; padding: 15px; background: #f0f0f0; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Vexo Generator</h1>
-            <p>اصنع روابط تشغيل لتطبيق Vexo Player</p>
-        </header>
+    <h2>Vexo Link Generator</h2>
+    
+    <input type="text" id="title" value="بث مباشر" placeholder="Title"><br>
+    <input type="text" id="scheme" value="clearkey" placeholder="Scheme"><br>
+    <input type="text" id="key" value="448128e485ef44d98024e7c5f3fa078b:a5759aeb79afae384819a20c481e2c4a" placeholder="Key"><br>
+    <input type="text" id="url" value="https://live-event-3-enc.edgenextcdn.net/out/v1/1117b28b859948afa6d5660460b392df/index.mpd" placeholder="Video URL"><br>
+    
+    <textarea id="referer" placeholder="Referer"></textarea><br>
+    <textarea id="cookie" placeholder="Cookie (name=value)"></textarea><br>
+    <textarea id="useragent" placeholder="User Agent"></textarea><br>
+    
+    <button onclick="generate()">Generate Link</button>
+    
+    <div class="result" id="result" style="display:none;">
+        <h3>Your Link:</h3>
+        <input type="text" id="generatedLink" style="width:100%;padding:10px;" readonly>
+        <button onclick="copyLink()">Copy Link</button>
+        <button onclick="testLink()">Test Link</button>
         
-        <!-- معلومات الفيديو -->
-        <div class="section">
-            <div class="section-title">معلومات الفيديو</div>
-            
-            <div class="form-group">
-                <label>رابط الفيديو (URL)*</label>
-                <input type="text" id="videoUrl" placeholder="https://example.com/video.mpd" 
-                       value="https://live-event-3-enc.edgenextcdn.net/out/v1/1117b28b859948afa6d5660460b392df/index.mpd">
-            </div>
-            
-            <div class="form-group">
-                <label>اسم السيرفر / الفيديو</label>
-                <input type="text" id="serverName" placeholder="HD, SD أو اسم الفيديو" value="HD">
-            </div>
-        </div>
-        
-        <!-- إعدادات التشغيل -->
-        <div class="section">
-            <div class="section-title">إعدادات التشغيل</div>
-            
-            <label>التشغيل في:</label>
-            <div class="checkbox-group">
-                <div class="checkbox-item">
-                    <input type="radio" name="playerType" id="exo" checked>
-                    <label for="exo">EXO</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="radio" name="playerType" id="web">
-                    <label for="web">WEB</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="radio" name="playerType" id="vexo">
-                    <label for="vexo">VEXO</label>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Headers -->
-        <div class="section">
-            <div class="section-title">Headers</div>
-            
-            <div class="form-group">
-                <label>User Agent</label>
-                <input type="text" id="userAgent" placeholder="Mozilla/5.0...">
-            </div>
-            
-            <div class="form-group">
-                <label>Referer</label>
-                <input type="text" id="referer" placeholder="https://example.com">
-            </div>
-            
-            <div class="form-group">
-                <label>Cookie</label>
-                <input type="text" id="cookie" placeholder="name=value; name2=value2">
-            </div>
-        </div>
-        
-        <!-- DRM -->
-        <div class="section">
-            <div class="section-title">DRM Protection</div>
-            
-            <div class="form-group">
-                <label>النوع:</label>
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="radio" name="drmType" id="clearkey" checked>
-                        <label for="clearkey">ClearKey</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="radio" name="drmType" id="widevine">
-                        <label for="widevine">Widevine</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="radio" name="drmType" id="playready">
-                        <label for="playready">PlayReady</label>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label>المفتاح (Key)</label>
-                <input type="text" id="drmKey" placeholder="keyId:keyValue" 
-                       value="448128e485ef44d98024e7c5f3fa078b:a5759aeb79afae384819a20c481e2c4a">
-            </div>
-        </div>
-        
-        <!-- زر التوليد -->
-        <button class="generate-btn" onclick="generateLink()">
-            توليد الرابط
-        </button>
-        
-        <!-- النتيجة -->
-        <div class="result" id="result">
-            <h3>كود HTML الناتج:</h3>
-            <textarea id="htmlCode" readonly></textarea>
-            
-            <div class="action-buttons">
-                <button class="action-btn copy-btn" onclick="copyCode()">نسخ الكود</button>
-                <button class="action-btn test-btn" onclick="testLink()">اختبار الرابط</button>
-            </div>
-        </div>
+        <h3>HTML Code:</h3>
+        <textarea id="htmlCode" rows="10"></textarea>
+        <button onclick="copyHTML()">Copy HTML</button>
     </div>
-
-    <script>
-        // توليد الرابط
-        function generateLink() {
-            // جمع البيانات
-            const videoUrl = document.getElementById('videoUrl').value;
-            const serverName = document.getElementById('serverName').value;
-            const userAgent = document.getElementById('userAgent').value;
-            const referer = document.getElementById('referer').value;
-            const cookie = document.getElementById('cookie').value;
-            const drmKey = document.getElementById('drmKey').value;
-            
-            // نوع المشغل
-            const playerType = document.querySelector('input[name="playerType"]:checked').id;
-            
-            // نوع DRM
-            const drmType = document.querySelector('input[name="drmType"]:checked').id;
-            
-            // إنشاء كود HTML
-            const htmlCode = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vexo Player</title>
-    <meta name="description" content="Experience seamless video playback with Vexo Player">
-    <style>
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #000;
-        }
-        .play-button {
-            background-color: #f7f7f7;
-            border: none;
-            padding: 10px;
-            font-size: 24px;
-            cursor: pointer;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .play-button:hover {
-            background-color: #999;
-        }
-    </style>
-</head>
-<body>
-    <button class="play-button" onclick="playVexo()">
-        <svg fill="#000000" height="80px" width="80px" viewBox="0 0 60 60">
-            <path d="M45.563,29.174l-22-15c-0.307-0.208-0.703-0.231-1.031-0.058C22.205,14.289,22,14.629,22,15v30 c0,0.371,0.205,0.711,0.533,0.884C22.679,45.962,22.84,46,23,46c0.197,0,0.394-0.059,0.563-0.174l22-15 C45.836,30.64,46,30.331,46,30S45.836,29.36,45.563,29.174z M24,43.107V16.893L43.225,30L24,43.107z"/>
-            <path d="M30,0C13.458,0,0,13.458,0,30s13.458,30,30,30s30-13.458,30-30S46.542,0,30,0z M30,58C14.561,58,2,45.439,2,30 S14.561,2,30,2s28,12.561,28,28S45.439,58,30,58z"/>
-        </svg>
-    </button>
     
     <script>
-        function playVexo() {
+        function generate() {
             const params = new URLSearchParams({
-                url: "${videoUrl}",
-                server: "${serverName}",
-                drm: "${drmType}",
-                key: "${drmKey}",
-                ua: "${userAgent}",
-                ref: "${referer}",
-                cookie: "${cookie}",
-                player: "${playerType}"
+                title: encodeURIComponent(document.getElementById('title').value),
+                scheme: document.getElementById('scheme').value,
+                key: encodeURIComponent(document.getElementById('key').value),
+                url: encodeURIComponent(document.getElementById('url').value),
+                referer: document.getElementById('referer').value,
+                cookie: document.getElementById('cookie').value,
+                useragent: document.getElementById('useragent').value
             });
             
-            window.location.href = "https://3tto77-max.github.io/play/?" + params.toString();
-        }
-        
-        // تشغيل تلقائي بعد 2 ثانية
-        setTimeout(playVexo, 2000);
+            const link = "https://3tto77-max.github.io/play/?" + params.toString();
+            document.getElementById('generatedLink').value = link;
+            
+            // إنشاء HTML
+            const html = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Vexo Player</title>
+    <style>
+        body { background: #000; height: 100vh; margin: 0; display: flex; align-items: center; justify-content: center; }
+        .play-btn { background: white; border: none; border-radius: 50%; width: 100px; height: 100px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <button class="play-btn" onclick="window.location.href='${link}'">▶</button>
+    <script>
+        setTimeout(() => window.location.href = "${link}", 2000);
     <\/script>
 </body>
 </html>`;
             
-            // عرض النتيجة
-            document.getElementById('htmlCode').value = htmlCode;
+            document.getElementById('htmlCode').value = html;
             document.getElementById('result').style.display = 'block';
         }
         
-        // نسخ الكود
-        function copyCode() {
-            const textarea = document.getElementById('htmlCode');
-            textarea.select();
+        function copyLink() {
+            document.getElementById('generatedLink').select();
             document.execCommand('copy');
-            alert('تم نسخ الكود!');
+            alert('Copied!');
         }
         
-        // اختبار الرابط
         function testLink() {
-            const videoUrl = document.getElementById('videoUrl').value;
-            const serverName = document.getElementById('serverName').value;
-            const drmType = document.querySelector('input[name="drmType"]:checked').id;
-            const drmKey = document.getElementById('drmKey').value;
-            const playerType = document.querySelector('input[name="playerType"]:checked').id;
-            
-            const params = new URLSearchParams({
-                url: videoUrl,
-                server: serverName,
-                drm: drmType,
-                key: drmKey,
-                player: playerType
-            });
-            
-            window.open('https://3tto77-max.github.io/play/?' + params.toString(), '_blank');
+            window.open(document.getElementById('generatedLink').value, '_blank');
+        }
+        
+        function copyHTML() {
+            document.getElementById('htmlCode').select();
+            document.execCommand('copy');
+            alert('HTML Copied!');
         }
         
         // توليد عند التحميل
-        window.addEventListener('load', generateLink);
+        generate();
     </script>
 </body>
 </html>
