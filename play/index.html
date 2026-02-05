@@ -3,133 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Vexo Player</title>
-    <style>
-        body {
-            background: #000;
-            color: white;
-            text-align: center;
-            padding: 50px;
-            font-family: Arial, sans-serif;
-        }
-        
-        .container {
-            max-width: 500px;
-            margin: 100px auto;
-        }
-        
-        .logo {
-            font-size: 60px;
-            color: #f59e0b;
-            margin-bottom: 20px;
-        }
-        
-        .open-app-btn {
-            background: linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);
-            color: black;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            margin: 20px 0;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .open-app-btn:hover {
-            opacity: 0.9;
-        }
-        
-        .fallback {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 30px;
-            display: none;
-        }
-    </style>
+    <script>
+        // توجيه مباشر إلى تطبيق Vexo
+        window.onload = function() {
+            // أخذ جميع المعاملات وإعادة توجيهها
+            const params = new URLSearchParams(window.location.search);
+            
+            // إعادة توجيه إلى صفحة التطبيق
+            window.location.href = "https://3tto77-max.github.io/player.html?" + params.toString();
+        };
+    </script>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">▶</div>
-        <h1>Vexo Player</h1>
-        <p id="message">جاري التوجيه إلى التطبيق...</p>
-        
-        <button class="open-app-btn" onclick="openInVexoApp()">
-            <span>▶</span>
-            افتح في تطبيق Vexo
-        </button>
-        
-        <div class="fallback" id="fallback">
-            <h3>لم يتم العثور على التطبيق</h3>
-            <p>تأكد من تثبيت تطبيق Vexo Player</p>
-            <button onclick="openFallbackPlayer()">تشغيل في المتصفح</button>
-        </div>
-    </div>
-
-    <script>
-        // جلب البيانات من URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const title = urlParams.get('title') || 'بث مباشر';
-        const scheme = urlParams.get('scheme') || 'clearkey';
-        const key = urlParams.get('key') || '';
-        const streamUrl = urlParams.get('url') || '';
-        
-        // تحديث الرسالة
-        document.getElementById('message').textContent = `جاري تحميل: ${title}`;
-        
-        // إنشاء رابط Vexo App
-        function createVexoAppLink() {
-            if (streamUrl) {
-                const params = new URLSearchParams({
-                    title: title,
-                    scheme: scheme,
-                    key: key,
-                    url: streamUrl
-                });
-                return `vexo://play?${params.toString()}`;
-            }
-            return null;
-        }
-        
-        // فتح في تطبيق Vexo
-        function openInVexoApp() {
-            const vexoLink = createVexoAppLink();
-            
-            if (vexoLink) {
-                // محاولة فتح التطبيق
-                window.location.href = vexoLink;
-                
-                // إذا فشل (بعد 2 ثانية)، عرض البديل
-                setTimeout(function() {
-                    if (!document.hidden) {
-                        document.getElementById('fallback').style.display = 'block';
-                        document.getElementById('message').textContent = 'لم يتم العثور على تطبيق Vexo';
-                    }
-                }, 2000);
-            } else {
-                document.getElementById('message').textContent = 'خطأ: لم يتم تحديد رابط البث';
-            }
-        }
-        
-        // تشغيل في المتصفح (البديل)
-        function openFallbackPlayer() {
-            if (streamUrl) {
-                window.location.href = `player.html?url=${encodeURIComponent(streamUrl)}`;
-            }
-        }
-        
-        // فتح تلقائي بعد 1 ثانية
-        setTimeout(openInVexoApp, 1000);
-        
-        // اكتشاف إذا ما فتح التطبيق
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                console.log('تم فتح التطبيق بنجاح!');
-            }
-        });
-    </script>
+    <p>Redirecting to Vexo Player...</p>
 </body>
 </html>
