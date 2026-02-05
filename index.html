@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مولد رابط Vexo Player</title>
+    <title>مولد رابط Vexo Player + HTML Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -33,7 +33,7 @@
 
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 700px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
             padding: 30px;
@@ -64,8 +64,19 @@
             margin-bottom: 25px;
         }
 
-        .form-group {
+        .form-row {
+            display: flex;
+            gap: 15px;
             margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .form-group.full-width {
+            flex: 0 0 100%;
         }
 
         label {
@@ -98,18 +109,14 @@
             box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
         }
 
-        input::placeholder {
-            color: #94a3b8;
-        }
-
         .buttons {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             margin: 30px 0;
         }
 
         .btn {
-            flex: 1;
             padding: 12px;
             border: none;
             border-radius: 10px;
@@ -143,13 +150,46 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .tab.active {
+            background: var(--gradient);
+            color: #0f172a;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .result-container {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
             padding: 20px;
-            margin-top: 20px;
             border: 1px solid rgba(245, 158, 11, 0.3);
-            display: none;
         }
 
         .result-label {
@@ -162,7 +202,7 @@
             font-size: 14px;
         }
 
-        #result {
+        #result, #htmlResult {
             background: rgba(0, 0, 0, 0.5);
             padding: 15px;
             border-radius: 8px;
@@ -171,8 +211,11 @@
             word-break: break-all;
             color: #fbbf24;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            min-height: 80px;
+            min-height: 120px;
+            max-height: 300px;
+            overflow-y: auto;
             line-height: 1.5;
+            white-space: pre-wrap;
         }
 
         .footer {
@@ -218,6 +261,34 @@
             color: #f87171;
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
+
+        .preview-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .preview-btn {
+            background: var(--gradient);
+            color: #0f172a;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .preview-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -226,8 +297,8 @@
             <div class="logo">
                 <i class="fas fa-play-circle"></i>
             </div>
-            <h1>مولد رابط Vexo Player</h1>
-            <p class="subtitle">أنشئ روابط تشغيل بتنسيق 3tto77-max.github.io</p>
+            <h1>مولد رابط Vexo + صفحة HTML</h1>
+            <p class="subtitle">أنشئ روابط تشغيل وصفحات HTML جاهزة</p>
         </div>
 
         <div class="form-group">
@@ -235,57 +306,107 @@
             <input type="text" id="title" value="بث مباشر" placeholder="أدخل عنوان البث">
         </div>
 
-        <div class="form-group">
-            <label class="required">نظام الحماية (Scheme)</label>
-            <select id="scheme">
-                <option value="clearkey" selected>ClearKey</option>
-                <option value="widevine">Widevine</option>
-                <option value="playready">PlayReady</option>
-                <option value="">بدون حماية</option>
-            </select>
-        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>نظام الحماية (Scheme)</label>
+                <select id="scheme">
+                    <option value="clearkey" selected>ClearKey</option>
+                    <option value="widevine">Widevine</option>
+                    <option value="playready">PlayReady</option>
+                    <option value="">بدون حماية</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label class="required">المفتاح (Key)</label>
-            <input type="text" id="key" placeholder="keyId:keyValue" 
-                   value="448128e485ef44d98024e7c5f3fa078b:a5759aeb79afae384819a20c481e2c4a">
-            <span class="hint">لـ ClearKey: keyId:keyValue (مثال: abc123:def456)</span>
+            <div class="form-group">
+                <label class="required">المفتاح (Key)</label>
+                <input type="text" id="key" placeholder="keyId:keyValue" 
+                       value="448128e485ef44d98024e7c5f3fa078b:a5759aeb79afae384819a20c481e2c4a">
+            </div>
         </div>
 
         <div class="form-group">
             <label class="required">رابط البث (URL)</label>
             <input type="text" id="url" placeholder="https://example.com/stream.mpd"
                    value="https://live-event-3-enc.edgenextcdn.net/out/v1/1117b28b859948afa6d5660460b392df/index.mpd">
+            <span class="hint">لـ ClearKey: keyId:keyValue (مثال: abc123:def456)</span>
         </div>
 
         <div class="buttons">
             <button class="btn btn-primary" onclick="generateLink()">
                 <i class="fas fa-bolt"></i>
-                توليد الرابط
+                إنشاء الرابط
             </button>
-            <button class="btn btn-secondary" onclick="copyLink()" id="copyBtn">
+            <button class="btn btn-secondary" onclick="copyLink('normal')" id="copyBtn">
                 <i class="fas fa-copy"></i>
-                نسخ
+                نسخ الرابط
             </button>
+            <button class="btn btn-success" onclick="generateHTML()">
+                <i class="fas fa-code"></i>
+                إنشاء HTML
+            </button>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('link')">الرابط</div>
+            <div class="tab" onclick="showTab('html')">صفحة HTML</div>
         </div>
 
         <div id="status" class="status"></div>
 
-        <div class="result-container" id="resultContainer">
-            <div class="result-label">
-                <i class="fas fa-link"></i>
-                الرابط الناتج:
+        <!-- تبويب الرابط العادي -->
+        <div class="tab-content active" id="linkTab">
+            <div class="result-container">
+                <div class="result-label">
+                    <i class="fas fa-link"></i>
+                    الرابط الناتج:
+                </div>
+                <div id="result">https://3tto77-max.github.io/play/?title=بث%20مباشر&scheme=clearkey&key=448128e485ef44d98024e7c5f3fa078b:a5759aeb79afae384819a20c481e2c4a&url=https://live-event-3-enc.edgenextcdn.net/out/v1/1117b28b859948afa6d5660460b392df/index.mpd</div>
             </div>
-            <div id="result">سيظهر الرابط هنا...</div>
+        </div>
+
+        <!-- تبويب صفحة HTML -->
+        <div class="tab-content" id="htmlTab">
+            <div class="result-container">
+                <div class="result-label">
+                    <i class="fas fa-code"></i>
+                    كود HTML الكامل:
+                </div>
+                <div id="htmlResult"><!-- سيتم عرض كود HTML هنا --></div>
+            </div>
+            
+            <div class="buttons" style="margin-top: 15px;">
+                <button class="btn btn-secondary" onclick="copyLink('html')">
+                    <i class="fas fa-copy"></i>
+                    نسخ كود HTML
+                </button>
+                <button class="btn btn-primary" onclick="downloadHTML()">
+                    <i class="fas fa-download"></i>
+                    تحميل كـ HTML
+                </button>
+                <button class="btn btn-success" onclick="previewHTML()">
+                    <i class="fas fa-eye"></i>
+                    معاينة الصفحة
+                </button>
+            </div>
+            
+            <div class="preview-box">
+                <p style="margin-bottom: 15px; color: #94a3b8;">اختبر الصفحة المولدة:</p>
+                <button class="preview-btn" onclick="openGeneratedPage()">
+                    <i class="fas fa-external-link-alt"></i>
+                    فتح الصفحة المولدة
+                </button>
+            </div>
         </div>
 
         <div class="footer">
             <p>© 2024 | متوافق مع https://3tto77-max.github.io/play/</p>
+            <p style="margin-top: 5px; font-size: 11px;">بإمكانك إنشاء صفحة HTML كاملة جاهزة للاستخدام</p>
         </div>
     </div>
 
     <script>
         let generatedLink = "";
+        let generatedHTML = "";
 
         function showStatus(message, type) {
             const status = document.getElementById('status');
@@ -298,13 +419,26 @@
             }, 3000);
         }
 
+        function showTab(tabName) {
+            // تحديد التبويبات النشطة
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // تفعيل التبويب المطلوب
+            document.querySelector(`.tab:nth-child(${tabName === 'link' ? '1' : '2'})`).classList.add('active');
+            document.getElementById(`${tabName}Tab`).classList.add('active');
+        }
+
         function generateLink() {
             const title = document.getElementById('title').value.trim();
             const scheme = document.getElementById('scheme').value.trim();
             const key = document.getElementById('key').value.trim();
             const url = document.getElementById('url').value.trim();
 
-            // التحقق من الحقول الإلزامية
             if (!title || !url) {
                 showStatus("يرجى ملء الحقول الإلزامية (العنوان ورابط البث)", "error");
                 return;
@@ -328,47 +462,278 @@
             
             // عرض النتيجة
             document.getElementById('result').textContent = generatedLink;
-            document.getElementById('resultContainer').style.display = 'block';
             
-            // تأثير مرئي
-            const resultElement = document.getElementById('result');
-            resultElement.style.borderColor = 'rgba(245, 158, 11, 0.5)';
-            setTimeout(() => {
-                resultElement.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-            }, 1000);
-            
-            showStatus("تم توليد الرابط بنجاح!", "success");
+            showStatus("تم إنشاء الرابط بنجاح!", "success");
+            showTab('link');
         }
 
-        function copyLink() {
+        function generateHTML() {
+            // أولاً نحتاج إلى إنشاء الرابط
+            generateLink();
+            
             if (!generatedLink) {
-                showStatus("يرجى توليد الرابط أولاً", "error");
+                showStatus("يرجى إنشاء الرابط أولاً", "error");
                 return;
             }
 
-            navigator.clipboard.writeText(generatedLink).then(() => {
-                const copyBtn = document.getElementById('copyBtn');
-                const originalHTML = copyBtn.innerHTML;
-                copyBtn.innerHTML = '<i class="fas fa-check"></i> تم النسخ!';
-                copyBtn.style.background = 'rgba(34, 197, 94, 0.2)';
-                copyBtn.style.color = '#4ade80';
+            const title = document.getElementById('title').value.trim();
+            const url = document.getElementById('url').value.trim();
+
+            // إنشاء كود HTML كامل مشابه لـ XPola
+            const htmlCode = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title} - Vexo Player</title>
+    <meta name="description" content="بث مباشر عالي الجودة عبر Vexo Player">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 500px;
+            padding: 30px;
+        }
+        
+        .logo {
+            font-size: 60px;
+            color: #f59e0b;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+        
+        .play-button {
+            background: linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);
+            color: #0f172a;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 0 auto;
+            transition: all 0.3s;
+            text-decoration: none;
+            width: fit-content;
+        }
+        
+        .play-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
+        }
+        
+        .play-button:active {
+            transform: translateY(-1px);
+        }
+        
+        .info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        
+        .info p {
+            margin-bottom: 10px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .url-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            word-break: break-all;
+            font-size: 12px;
+            color: #fbbf24;
+            font-family: monospace;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            color: #64748b;
+            font-size: 12px;
+        }
+        
+        .auto-redirect {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #4ade80;
+        }
+    </style>
+    <script>
+        // إعادة التوجيه التلقائي بعد 5 ثواني
+        setTimeout(function() {
+            window.location.href = "${generatedLink}";
+        }, 5000);
+        
+        // عند النقر على الزر، إلغاء التوجيه التلقائي
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.play-button').addEventListener('click', function() {
+                clearTimeout(window.redirectTimeout);
+            });
+        });
+    <\/script>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-play-circle"></i>
+        </div>
+        
+        <h1>${title}</h1>
+        <p class="subtitle">جاهز للتشغيل عبر Vexo Player</p>
+        
+        <div class="auto-redirect">
+            <i class="fas fa-clock"></i>
+            سيتم التوجيه تلقائياً خلال 5 ثواني...
+        </div>
+        
+        <a href="${generatedLink}" class="play-button" target="_blank">
+            <i class="fas fa-play"></i>
+            تشغيل الآن
+        </a>
+        
+        <div class="info">
+            <p><i class="fas fa-info-circle"></i> معلومات البث:</p>
+            <div class="url-box">${url}</div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 Vexo Player | Generated by Vexo Creator</p>
+            <p>سيتم فتح البث في نافذة جديدة</p>
+        </div>
+    </div>
+    
+    <!-- Font Awesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"><\/script>
+</body>
+</html>`;
+
+            generatedHTML = htmlCode;
+            document.getElementById('htmlResult').textContent = htmlCode;
+            
+            showStatus("تم إنشاء صفحة HTML بنجاح!", "success");
+            showTab('html');
+        }
+
+        function copyLink(type) {
+            let textToCopy = type === 'html' ? generatedHTML : generatedLink;
+            
+            if (!textToCopy) {
+                showStatus(`يرجى إنشاء ${type === 'html' ? 'صفحة HTML' : 'الرابط'} أولاً`, "error");
+                return;
+            }
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalHTML = btn.innerHTML;
+                
+                if (type === 'html') {
+                    btn.innerHTML = '<i class="fas fa-check"></i> تم نسخ HTML!';
+                } else {
+                    btn.innerHTML = '<i class="fas fa-check"></i> تم النسخ!';
+                }
+                
+                btn.style.background = 'rgba(34, 197, 94, 0.2)';
+                btn.style.color = '#4ade80';
                 
                 setTimeout(() => {
-                    copyBtn.innerHTML = originalHTML;
-                    copyBtn.style.background = 'rgba(255, 255, 255, 0.1)';
-                    copyBtn.style.color = 'var(--light)';
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = 'rgba(255, 255, 255, 0.1)';
+                    btn.style.color = 'var(--light)';
                 }, 2000);
                 
-                showStatus("تم نسخ الرابط إلى الحافظة", "success");
+                showStatus(`تم نسخ ${type === 'html' ? 'كود HTML' : 'الرابط'} إلى الحافظة`, "success");
             }).catch(err => {
                 console.error('فشل النسخ:', err);
-                showStatus("فشل نسخ الرابط", "error");
+                showStatus("فشل النسخ", "error");
             });
+        }
+
+        function downloadHTML() {
+            if (!generatedHTML) {
+                showStatus("يرجى إنشاء صفحة HTML أولاً", "error");
+                return;
+            }
+
+            const title = document.getElementById('title').value.trim() || 'بث-مباشر';
+            const blob = new Blob([generatedHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            a.href = url;
+            a.download = `${title}-vexo-player.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showStatus("تم تحميل ملف HTML بنجاح!", "success");
+        }
+
+        function previewHTML() {
+            if (!generatedHTML) {
+                showStatus("يرجى إنشاء صفحة HTML أولاً", "error");
+                return;
+            }
+
+            const previewWindow = window.open();
+            previewWindow.document.write(generatedHTML);
+            previewWindow.document.close();
+            
+            showStatus("تم فتح صفحة المعاينة", "success");
+        }
+
+        function openGeneratedPage() {
+            if (!generatedLink) {
+                showStatus("يرجى إنشاء الرابط أولاً", "error");
+                return;
+            }
+
+            window.open(generatedLink, '_blank');
+            showStatus("تم فتح الصفحة في نافذة جديدة", "success");
         }
 
         // توليد الرابط تلقائياً عند فتح الصفحة
         window.addEventListener('load', () => {
             generateLink();
+            // بعد إنشاء الرابط، إنشاء HTML أيضاً
+            setTimeout(generateHTML, 500);
         });
 
         // السماح بضغط Enter في أي حقل لتوليد الرابط
@@ -376,6 +741,7 @@
             element.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     generateLink();
+                    generateHTML();
                 }
             });
         });
