@@ -3,49 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Open URL Video in Vexo Player</title>
+<title>Open Video in Vexo Player</title>
 <meta name="description" content="Open video directly in Vexo Player">
 
 <style>
 body{
-margin:0;
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-background:#000;
+    margin:0;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#000;
 }
 .play-button{
-background:#f7f7f7;
-border:none;
-padding:10px;
-border-radius:50%;
-cursor:pointer;
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    border:none;
+    background:#f7f7f7;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
-.play-button:hover{background:#999}
+.play-button:hover{
+    background:#999;
+}
 </style>
 </head>
 
 <body>
 
-<button class="play-button" onclick="openApp()">
+<button class="play-button" onclick="openExternal()">
 ▶
 </button>
 
 <script>
-const params = location.search;
-const appLink = "vexo://play" + params;
+// قراءة الباراميترات من الرابط
+const p = new URLSearchParams(window.location.search);
 
-function openApp(){
-    location.href = appLink;
+const title     = encodeURIComponent(p.get("title") || "");
+const url       = encodeURIComponent(p.get("url") || "");
+const scheme    = p.get("scheme") || "";
+const key       = encodeURIComponent(p.get("key") || "");
+const referer   = encodeURIComponent(p.get("referer") || "");
+const origin    = encodeURIComponent(p.get("origin") || "");
+const cookie    = encodeURIComponent(p.get("cookie") || "");
+const useragent = encodeURIComponent(p.get("useragent") || "");
+const license   = encodeURIComponent(p.get("license") || "");
 
+// بناء intent مثل XPola
+let intent = "intent://play?";
+if(title)     intent += "title=" + title;
+if(scheme)    intent += "&scheme=" + scheme;
+if(key)       intent += "&key=" + key;
+if(url)       intent += "&url=" + url;
+if(referer)   intent += "&referer=" + referer;
+if(origin)    intent += "&origin=" + origin;
+if(cookie)    intent += "&cookie=" + cookie;
+if(useragent) intent += "&useragent=" + useragent;
+if(license)   intent += "&license=" + license;
+
+intent += "#Intent;scheme=vexo;package=com.vexo.player;end";
+
+// الفتح الخارجي الحقيقي
+function openExternal(){
+    window.open(intent, "_system");
+
+    // fallback إذا التطبيق غير مثبت
     setTimeout(()=>{
-        location.href="https://t.me/VexoPlayer";
-    },1500);
+        window.location.href =
+        "https://www.mediafire.com/file/5wtszrv23oxcx5j/VexoPlayer.apk/file";
+    },2000);
 }
 
-// فتح تلقائي مثل xPola
-setTimeout(openApp,500);
+// فتح تلقائي (مثل XPola)
+setTimeout(openExternal, 300);
 </script>
 
 </body>
