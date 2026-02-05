@@ -1,20 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Vexo Player</title>
-    <script>
-        // توجيه مباشر إلى تطبيق Vexo
-        window.onload = function() {
-            // أخذ جميع المعاملات وإعادة توجيهها
-            const params = new URLSearchParams(window.location.search);
-            
-            // إعادة توجيه إلى صفحة التطبيق
-            window.location.href = "https://3tto77-max.github.io/player.html?" + params.toString();
-        };
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open URL Video in Vexo Player</title>
+<meta name="description" content="Open video directly in Vexo Player">
+
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#000;
+}
+.play-button{
+background:#f7f7f7;
+border:none;
+padding:10px;
+border-radius:50%;
+cursor:pointer;
+}
+.play-button:hover{background:#999}
+</style>
 </head>
+
 <body>
-    <p>Redirecting to Vexo Player...</p>
+
+<button class="play-button" onclick="openApp()">
+▶
+</button>
+
+<script>
+const params = location.search;
+const appLink = "vexo://play" + params;
+
+function openApp(){
+    location.href = appLink;
+
+    setTimeout(()=>{
+        location.href="https://t.me/VexoPlayer";
+    },1500);
+}
+
+// فتح تلقائي مثل xPola
+setTimeout(openApp,500);
+</script>
+
 </body>
 </html>
