@@ -3,17 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vexo Player | مولد روابط</title>
+<title>Vexo Player | Link Generator</title>
 
 <style>
 body{
-margin:0;
 background:#0f172a;
 color:#fff;
-font-family:Segoe UI,sans-serif;
+font-family:Cairo,Segoe UI;
 display:flex;
-align-items:center;
 justify-content:center;
+align-items:center;
 min-height:100vh;
 }
 .box{
@@ -21,32 +20,27 @@ background:#1e293b;
 padding:25px;
 border-radius:18px;
 width:95%;
-max-width:520px;
-box-shadow:0 20px 40px rgba(0,0,0,.5);
+max-width:500px;
 }
-h1{color:#fbbf24;text-align:center}
-label{display:block;margin-top:15px;font-weight:600}
 input,select{
 width:100%;
 padding:12px;
+margin-top:10px;
 border-radius:10px;
 border:none;
-margin-top:6px;
 }
 button{
-margin-top:20px;
+margin-top:15px;
 width:100%;
-padding:15px;
+padding:14px;
 border:none;
 border-radius:14px;
-font-size:16px;
+background:#fbbf24;
 font-weight:700;
 cursor:pointer;
-background:linear-gradient(135deg,#fbbf24,#f59e0b);
-color:#000;
 }
 pre{
-margin-top:20px;
+margin-top:15px;
 background:#020617;
 padding:15px;
 border-radius:10px;
@@ -58,84 +52,39 @@ overflow:auto;
 </head>
 
 <body>
+
 <div class="box">
+<h2>Vexo Link Generator</h2>
 
-<h1>Vexo Player Generator</h1>
+<input id="title" placeholder="Title" value="بث مباشر">
+<input id="url" placeholder="Video URL">
+<input id="scheme" placeholder="Scheme (clearkey)">
+<input id="key" placeholder="Key (KEY_ID:KEY)">
+<input id="useragent" placeholder="User-Agent (optional)">
+<input id="referer" placeholder="Referer (optional)">
+<input id="cookie" placeholder="Cookie (optional)">
+<input id="origin" placeholder="Origin (optional)">
 
-<label>العنوان</label>
-<input id="title" value="بث مباشر">
+<button onclick="generate()">Generate</button>
 
-<label>Scheme</label>
-<select id="scheme">
-<option value="clearkey">clearkey</option>
-<option value="widevine">widevine</option>
-<option value="playready">playready</option>
-<option value="">بدون</option>
-</select>
-
-<label>Key</label>
-<input id="key" placeholder="keyId:keyValue">
-
-<label>رابط البث</label>
-<input id="url" placeholder="https://example.com/stream.mpd">
-
-<button onclick="generate()">إنشاء صفحة HTML</button>
-
-<pre id="out">سيظهر الكود هنا...</pre>
-
+<pre id="out">سيظهر الرابط هنا</pre>
 </div>
 
 <script>
 function generate(){
-const t = encodeURIComponent(title.value);
-const s = scheme.value;
-const k = encodeURIComponent(key.value);
-const u = encodeURIComponent(url.value);
+const q = new URLSearchParams({
+title:document.getElementById("title").value,
+url:document.getElementById("url").value,
+scheme:document.getElementById("scheme").value,
+key:document.getElementById("key").value,
+useragent:document.getElementById("useragent").value,
+referer:document.getElementById("referer").value,
+cookie:document.getElementById("cookie").value,
+origin:document.getElementById("origin").value
+});
 
-const playUrl =
-`https://3tto77-max.github.io/play/?title=${t}` +
-(s?`&scheme=${s}`:"") +
-(key.value?`&key=${k}`:"") +
-`&url=${u}`;
-
-const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Open Video in Vexo Player</title>
-
-<style>
-body{
-margin:0;
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-background:#000;
-}
-.play-button{
-background:#f7f7f7;
-border:none;
-padding:10px;
-border-radius:50%;
-cursor:pointer;
-}
-.play-button:hover{background:#999}
-</style>
-</head>
-
-<body>
-
-<button class="play-button"
-onclick="location.href='${playUrl}'">
-▶
-</button>
-
-</body>
-</html>`;
-
-out.textContent = html;
+const link = location.origin + "/play/?" + q.toString();
+document.getElementById("out").textContent = link;
 }
 </script>
 
