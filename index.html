@@ -3,40 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vexo Player | Link Generator</title>
+<title>Vexo Player | مولد روابط + HTML</title>
 
 <style>
 body{
+margin:0;
 background:#0f172a;
 color:#fff;
-font-family:Cairo,Segoe UI;
-display:flex;
-justify-content:center;
-align-items:center;
+font-family:Cairo,Segoe UI,sans-serif;
 min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 .box{
 background:#1e293b;
 padding:25px;
 border-radius:18px;
 width:95%;
-max-width:500px;
+max-width:600px;
+box-shadow:0 20px 40px rgba(0,0,0,.5);
 }
+h1{color:#fbbf24;text-align:center}
+label{margin-top:12px;display:block}
 input,select{
 width:100%;
-padding:12px;
-margin-top:10px;
+padding:10px;
 border-radius:10px;
 border:none;
+margin-top:6px;
 }
 button{
 margin-top:15px;
 width:100%;
 padding:14px;
-border:none;
 border-radius:14px;
+border:none;
+font-size:16px;
+font-weight:bold;
 background:#fbbf24;
-font-weight:700;
 cursor:pointer;
 }
 pre{
@@ -45,48 +50,94 @@ background:#020617;
 padding:15px;
 border-radius:10px;
 font-size:12px;
-color:#fbbf24;
 overflow:auto;
+color:#fbbf24;
 }
 </style>
 </head>
 
 <body>
-
 <div class="box">
-<h2>Vexo Link Generator</h2>
 
-<input id="title" placeholder="Title" value="بث مباشر">
-<input id="url" placeholder="Video URL">
-<input id="scheme" placeholder="Scheme (clearkey)">
-<input id="key" placeholder="Key (KEY_ID:KEY)">
-<input id="useragent" placeholder="User-Agent (optional)">
-<input id="referer" placeholder="Referer (optional)">
-<input id="cookie" placeholder="Cookie (optional)">
-<input id="origin" placeholder="Origin (optional)">
+<h1>Vexo Generator</h1>
 
-<button onclick="generate()">Generate</button>
+<label>العنوان</label>
+<input id="title" value="بث مباشر">
 
-<pre id="out">سيظهر الرابط هنا</pre>
+<label>Scheme</label>
+<select id="scheme">
+<option value="clearkey">ClearKey</option>
+<option value="widevine">Widevine</option>
+<option value="playready">PlayReady</option>
+<option value="">بدون</option>
+</select>
+
+<label>Key</label>
+<input id="key" placeholder="keyId:keyValue">
+
+<label>رابط الفيديو</label>
+<input id="url" placeholder="https://example.com/video.mpd">
+
+<button onclick="generate()">توليد الرابط + HTML</button>
+
+<pre id="out">سيظهر الناتج هنا...</pre>
+
 </div>
 
 <script>
 function generate(){
-const q = new URLSearchParams({
-title:document.getElementById("title").value,
-url:document.getElementById("url").value,
-scheme:document.getElementById("scheme").value,
-key:document.getElementById("key").value,
-useragent:document.getElementById("useragent").value,
-referer:document.getElementById("referer").value,
-cookie:document.getElementById("cookie").value,
-origin:document.getElementById("origin").value
-});
+const t = encodeURIComponent(document.getElementById("title").value);
+const s = document.getElementById("scheme").value;
+const k = encodeURIComponent(document.getElementById("key").value);
+const u = encodeURIComponent(document.getElementById("url").value);
 
-const link = location.origin + "/play/?" + q.toString();
-document.getElementById("out").textContent = link;
+const intent =
+`intent://play?title=${t}${s?`&scheme=${s}`:""}${k?`&key=${k}`:""}&url=${u}#Intent;scheme=vexo;package=com.vexo.player;end`;
+
+const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open in Vexo Player</title>
+<style>
+body{
+margin:0;
+background:#000;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
 }
+button{
+width:90px;
+height:90px;
+border-radius:50%;
+font-size:30px;
+background:#fbbf24;
+border:none;
+cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<a href="${intent}">
+<button>▶</button>
+</a>
+
+<script>
+setTimeout(()=>{
+location.href="${intent}";
+},800);
 </script>
 
+</body>
+</html>`;
+
+document.getElementById("out").textContent =
+"🔗 Intent Link:\n\n" + intent + "\n\n====================\n\n📄 HTML Page:\n\n" + html;
+}
+</script>
 </body>
 </html>
