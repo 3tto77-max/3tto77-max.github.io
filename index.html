@@ -1,35 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Vexo Player</title>
+    <title>مولد رابط Vexo</title>
+    <meta charset="UTF-8">
     <style>
-        body { background: black; text-align: center; color: white; padding: 50px; }
-        button { 
-            background: orange; 
-            color: black; 
-            border: none; 
-            padding: 15px 30px; 
-            font-size: 18px; 
-            cursor: pointer; 
-            border-radius: 10px; 
-        }
+        body { padding: 20px; font-family: Arial; }
+        input { width: 100%; padding: 10px; margin: 5px 0; }
+        button { padding: 10px 20px; margin: 10px 0; background: #f59e0b; color: black; border: none; border-radius: 5px; cursor: pointer; }
+        .result { margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; }
+        .link { word-break: break-all; padding: 10px; background: white; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
-    <h1>Vexo Player</h1>
+    <h2>مولد رابط Vexo</h2>
     
-    <button onclick="openPlayer()">
-        ▶ تشغيل البث المباشر
-    </button>
+    <input type="text" id="title" value="بث مباشر" placeholder="العنوان"><br>
+    <input type="text" id="scheme" value="clearkey" placeholder="النظام"><br>
+    <input type="text" id="key" value="448128e485ef44d98024e7c5f3fa078b:a5759aeb79afae384819a20c481e2c4a" placeholder="المفتاح"><br>
+    <input type="text" id="url" value="https://live-event-3-enc.edgenextcdn.net/out/v1/1117b28b859948afa6d5660460b392df/index.mpd" placeholder="رابط البث"><br>
     
-    <p style="margin-top: 30px; color: #ccc;">
-        سيتم فتح الرابط في مشغل Vexo
-    </p>
+    <button onclick="generate()">أنشئ الرابط</button>
+    
+    <div class="result" id="result">
+        <h3>الرابط:</h3>
+        <div class="link" id="link">...</div>
+        <button onclick="testLink()">اختبر الرابط</button>
+    </div>
     
     <script>
-        function openPlayer() {
-            window.location.href = "https://3tto77-max.github.io/play/?title=بث%20مباشر&scheme=clearkey&key=448128e485ef44d98024e7c5f3fa078b:a5759aeb79afae384819a20c481e2c4a&url=https://live-event-3-enc.edgenextcdn.net/out/v1/1117b28b859948afa6d5660460b392df/index.mpd";
+        function generate() {
+            const title = encodeURIComponent(document.getElementById('title').value);
+            const scheme = document.getElementById('scheme').value;
+            const key = encodeURIComponent(document.getElementById('key').value);
+            const url = encodeURIComponent(document.getElementById('url').value);
+            
+            const vexoLink = `https://3tto77-max.github.io/play/?title=${title}&scheme=${scheme}&key=${key}&url=${url}`;
+            
+            document.getElementById('link').innerHTML = vexoLink;
+            document.getElementById('result').style.display = 'block';
         }
+        
+        function testLink() {
+            const link = document.getElementById('link').innerText;
+            window.open(link, '_blank');
+        }
+        
+        // توليد عند التحميل
+        generate();
     </script>
 </body>
 </html>
