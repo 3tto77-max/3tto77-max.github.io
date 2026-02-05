@@ -1,96 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>Vexo Generator</title>
-    <style>
-        body { padding: 20px; font-family: Arial; }
-        input, textarea { width: 100%; padding: 10px; margin: 5px 0; }
-        button { padding: 10px 20px; background: orange; color: black; border: none; margin: 10px; }
-        .result { margin-top: 20px; padding: 15px; background: #f0f0f0; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vexo Player | مولد روابط</title>
+
+<style>
+body{
+margin:0;
+background:#0f172a;
+color:#fff;
+font-family:Segoe UI,sans-serif;
+display:flex;
+align-items:center;
+justify-content:center;
+min-height:100vh;
+}
+.box{
+background:#1e293b;
+padding:25px;
+border-radius:18px;
+width:95%;
+max-width:520px;
+box-shadow:0 20px 40px rgba(0,0,0,.5);
+}
+h1{color:#fbbf24;text-align:center}
+label{display:block;margin-top:15px;font-weight:600}
+input,select{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:none;
+margin-top:6px;
+}
+button{
+margin-top:20px;
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+font-size:16px;
+font-weight:700;
+cursor:pointer;
+background:linear-gradient(135deg,#fbbf24,#f59e0b);
+color:#000;
+}
+pre{
+margin-top:20px;
+background:#020617;
+padding:15px;
+border-radius:10px;
+font-size:12px;
+color:#fbbf24;
+overflow:auto;
+}
+</style>
 </head>
+
 <body>
-    <h2>Vexo Link Generator</h2>
-    
-    <input type="text" id="title" value="بث مباشر" placeholder="Title"><br>
-    <input type="text" id="scheme" value="clearkey" placeholder="Scheme"><br>
-    <input type="text" id="key" value="448128e485ef44d98024e7c5f3fa078b:a5759aeb79afae384819a20c481e2c4a" placeholder="Key"><br>
-    <input type="text" id="url" value="https://live-event-3-enc.edgenextcdn.net/out/v1/1117b28b859948afa6d5660460b392df/index.mpd" placeholder="Video URL"><br>
-    
-    <textarea id="referer" placeholder="Referer"></textarea><br>
-    <textarea id="cookie" placeholder="Cookie (name=value)"></textarea><br>
-    <textarea id="useragent" placeholder="User Agent"></textarea><br>
-    
-    <button onclick="generate()">Generate Link</button>
-    
-    <div class="result" id="result" style="display:none;">
-        <h3>Your Link:</h3>
-        <input type="text" id="generatedLink" style="width:100%;padding:10px;" readonly>
-        <button onclick="copyLink()">Copy Link</button>
-        <button onclick="testLink()">Test Link</button>
-        
-        <h3>HTML Code:</h3>
-        <textarea id="htmlCode" rows="10"></textarea>
-        <button onclick="copyHTML()">Copy HTML</button>
-    </div>
-    
-    <script>
-        function generate() {
-            const params = new URLSearchParams({
-                title: encodeURIComponent(document.getElementById('title').value),
-                scheme: document.getElementById('scheme').value,
-                key: encodeURIComponent(document.getElementById('key').value),
-                url: encodeURIComponent(document.getElementById('url').value),
-                referer: document.getElementById('referer').value,
-                cookie: document.getElementById('cookie').value,
-                useragent: document.getElementById('useragent').value
-            });
-            
-            const link = "https://3tto77-max.github.io/play/?" + params.toString();
-            document.getElementById('generatedLink').value = link;
-            
-            // إنشاء HTML
-            const html = `<!DOCTYPE html>
-<html>
+<div class="box">
+
+<h1>Vexo Player Generator</h1>
+
+<label>العنوان</label>
+<input id="title" value="بث مباشر">
+
+<label>Scheme</label>
+<select id="scheme">
+<option value="clearkey">clearkey</option>
+<option value="widevine">widevine</option>
+<option value="playready">playready</option>
+<option value="">بدون</option>
+</select>
+
+<label>Key</label>
+<input id="key" placeholder="keyId:keyValue">
+
+<label>رابط البث</label>
+<input id="url" placeholder="https://example.com/stream.mpd">
+
+<button onclick="generate()">إنشاء صفحة HTML</button>
+
+<pre id="out">سيظهر الكود هنا...</pre>
+
+</div>
+
+<script>
+function generate(){
+const t = encodeURIComponent(title.value);
+const s = scheme.value;
+const k = encodeURIComponent(key.value);
+const u = encodeURIComponent(url.value);
+
+const playUrl =
+`https://3tto77-max.github.io/play/?title=${t}` +
+(s?`&scheme=${s}`:"") +
+(key.value?`&key=${k}`:"") +
+`&url=${u}`;
+
+const html = `<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Vexo Player</title>
-    <style>
-        body { background: #000; height: 100vh; margin: 0; display: flex; align-items: center; justify-content: center; }
-        .play-btn { background: white; border: none; border-radius: 50%; width: 100px; height: 100px; cursor: pointer; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Video in Vexo Player</title>
+
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#000;
+}
+.play-button{
+background:#f7f7f7;
+border:none;
+padding:10px;
+border-radius:50%;
+cursor:pointer;
+}
+.play-button:hover{background:#999}
+</style>
 </head>
+
 <body>
-    <button class="play-btn" onclick="window.location.href='${link}'">▶</button>
-    <script>
-        setTimeout(() => window.location.href = "${link}", 2000);
-    <\/script>
+
+<button class="play-button"
+onclick="location.href='${playUrl}'">
+▶
+</button>
+
 </body>
 </html>`;
-            
-            document.getElementById('htmlCode').value = html;
-            document.getElementById('result').style.display = 'block';
-        }
-        
-        function copyLink() {
-            document.getElementById('generatedLink').select();
-            document.execCommand('copy');
-            alert('Copied!');
-        }
-        
-        function testLink() {
-            window.open(document.getElementById('generatedLink').value, '_blank');
-        }
-        
-        function copyHTML() {
-            document.getElementById('htmlCode').select();
-            document.execCommand('copy');
-            alert('HTML Copied!');
-        }
-        
-        // توليد عند التحميل
-        generate();
-    </script>
+
+out.textContent = html;
+}
+</script>
+
 </body>
 </html>
