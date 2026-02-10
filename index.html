@@ -28,46 +28,42 @@ box-shadow:0 20px 40px rgba(0,0,0,.5);
 
 h1{color:#fbbf24;text-align:center}
 
-label{
-margin-top:12px;
-display:block;
-font-weight:bold;
-}
+label{margin-top:12px;display:block}
 
-input,select,textarea{
+input,select{
 width:100%;
 padding:10px;
 border-radius:10px;
 border:none;
 margin-top:6px;
 font-size:14px;
-background:#0f172a;
-color:#fff;
-box-sizing:border-box;
 }
 
-.small-input{
-width:100%;
+.buttons{
+display:flex;
+gap:10px;
+margin-top:18px;
 }
 
 button{
-margin-top:18px;
 width:100%;
 padding:14px;
 border-radius:14px;
 border:none;
 font-size:16px;
 font-weight:bold;
-background:#fbbf24;
 cursor:pointer;
-transition:background 0.3s;
 }
 
-button:hover{
-background:#f59e0b;
+.btn-generate{
+background:#fbbf24;
 }
 
-.output-textarea{
+.btn-web{
+background:#3b82f6;
+}
+
+textarea{
 margin-top:15px;
 width:100%;
 height:300px;
@@ -78,27 +74,6 @@ border-radius:12px;
 padding:12px;
 font-size:12px;
 resize:none;
-font-family:monospace;
-}
-
-.form-group{
-margin-bottom:15px;
-}
-
-.optional{
-color:#94a3b8;
-font-size:12px;
-font-style:italic;
-}
-
-.form-row{
-display:flex;
-gap:10px;
-margin-bottom:15px;
-}
-
-.form-row > div{
-flex:1;
 }
 </style>
 </head>
@@ -109,197 +84,111 @@ flex:1;
 
 <h1>Vexo Generator</h1>
 
-<div class="form-group">
-<label>العنوان (Name)</label>
-<input id="title" value="بث مباشر" placeholder="أدخل عنوان البث">
-</div>
+<label>العنوان</label>
+<input id="title" value="بث مباشر">
 
-<div class="form-group">
-<label>رابط الفيديو (URL)</label>
-<input id="url" value="https://example.com/video.mpd" placeholder="M3U, M3U8, TS, MP4...">
-</div>
-
-<div class="form-group">
-<label>User-Agent</label>
-<input id="userAgent" value="" placeholder="اختياري - User Agent">
-<span class="optional">(اختياري)</span>
-</div>
-
-<div class="form-group">
-<label>Referer</label>
-<input id="referer" value="" placeholder="اختياري - Referer">
-<span class="optional">(اختياري)</span>
-</div>
-
-<div class="form-group">
-<label>Cookie</label>
-<input id="cookie" value="" placeholder="name=value;name2=value2...">
-<span class="optional">(اختياري)</span>
-</div>
-
-<div class="form-group">
-<label>رابط ترخيص DRM (DRM License URL)</label>
-<input id="drmLicenseUrl" value="" placeholder="رابط ترخيص DRM">
-</div>
-
-<div class="form-group">
-<label>Origin</label>
-<input id="origin" value="" placeholder="اختياري - Origin">
-<span class="optional">(اختياري)</span>
-</div>
-
-<div class="form-group">
-<label>نظام DRM (DRM Scheme)</label>
+<label>Scheme</label>
 <select id="scheme">
 <option value="clearkey">ClearKey</option>
 <option value="widevine">Widevine</option>
-<option value="playready" selected>PlayReady</option>
-<option value="">بدون DRM</option>
+<option value="playready">PlayReady</option>
+<option value="">بدون</option>
 </select>
+
+<label>Key (keyId:keyValue)</label>
+<input id="key" value="ab12:cd34">
+
+<label>رابط الفيديو</label>
+<input id="url" value="https://example.com/video.mpd">
+
+<div class="buttons">
+<button class="btn-generate" onclick="generate()">توليد الرابط + HTML</button>
+<button class="btn-web" onclick="generateWebLink()">توليد رابط ويب</button>
 </div>
 
-<div class="form-group">
-<label>مفتاح التشفير (Key) - keyId:keyValue</label>
-<input id="key" value="ab12:cd34" placeholder="مثال: ab12:cd34">
-</div>
-
-<button onclick="generate()">توليد الرابط + HTML</button>
-
-<textarea class="output-textarea" id="out" readonly>سيظهر الناتج هنا...</textarea>
+<textarea id="out" readonly>سيظهر الناتج هنا...</textarea>
 
 </div>
 
 <script>
 function generate(){
-    // جمع القيم من الحقول
-    var title = encodeURIComponent(document.getElementById("title").value.trim());
-    var url = encodeURIComponent(document.getElementById("url").value.trim());
-    var userAgent = encodeURIComponent(document.getElementById("userAgent").value.trim());
-    var referer = encodeURIComponent(document.getElementById("referer").value.trim());
-    var cookie = encodeURIComponent(document.getElementById("cookie").value.trim());
-    var drmLicenseUrl = encodeURIComponent(document.getElementById("drmLicenseUrl").value.trim());
-    var origin = encodeURIComponent(document.getElementById("origin").value.trim());
-    var scheme = document.getElementById("scheme").value;
-    var keyRaw = document.getElementById("key").value.trim();
-    var key = encodeURIComponent(keyRaw);
+var title = encodeURIComponent(
+  document.getElementById("title").value
+);
 
-    // بناء رابط Intent مع جميع المعاملات
-    var intentParams = [
-        "intent://play",
-        "?title=" + title,
-        "&url=" + url
-    ];
+var scheme = document.getElementById("scheme").value;
 
-    // إضافة المعاملات الاختيارية إذا كانت موجودة
-    if (userAgent) intentParams.push("&userAgent=" + userAgent);
-    if (referer) intentParams.push("&referer=" + referer);
-    if (cookie) intentParams.push("&cookie=" + cookie);
-    if (drmLicenseUrl) intentParams.push("&drmLicenseUrl=" + drmLicenseUrl);
-    if (origin) intentParams.push("&origin=" + origin);
-    if (scheme) intentParams.push("&scheme=" + scheme);
-    if (keyRaw) intentParams.push("&key=" + key);
+var keyRaw = document.getElementById("key").value;
+var key = encodeURIComponent(keyRaw);
 
-    intentParams.push("#Intent;scheme=vexo;package=com.vexo.player;end");
+var url = encodeURIComponent(
+  document.getElementById("url").value
+);
 
-    var intent = intentParams.join("");
+var intent =
+"intent://play?title=" + title +
+(scheme ? "&scheme=" + scheme : "") +
+(keyRaw ? "&key=" + key : "") +
+"&url=" + url +
+"#Intent;scheme=vexo;package=com.vexo.player;end";
 
-    // بناء صفحة HTML كاملة
-    var html = '<!DOCTYPE html>\n' +
-'<html lang="ar" dir="rtl">\n' +
+var html =
+'<!DOCTYPE html>\n' +
+'<html lang="en">\n' +
 '<head>\n' +
 '<meta charset="UTF-8">\n' +
 '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'<title>تشغيل في Vexo Player</title>\n' +
+'<title>Open Video in Vexo Player</title>\n' +
 '<style>\n' +
-'body {\n' +
-'    margin: 0;\n' +
-'    height: 100vh;\n' +
-'    display: flex;\n' +
-'    flex-direction: column;\n' +
-'    align-items: center;\n' +
-'    justify-content: center;\n' +
-'    background: linear-gradient(135deg, #0f172a, #1e293b);\n' +
-'    color: #fff;\n' +
-'    font-family: Arial, sans-serif;\n' +
-'}\n' +
-'.container {\n' +
-'    text-align: center;\n' +
-'    padding: 30px;\n' +
-'    background: rgba(30, 41, 59, 0.8);\n' +
-'    border-radius: 20px;\n' +
-'    box-shadow: 0 10px 30px rgba(0,0,0,0.3);\n' +
-'}\n' +
-'.play-button {\n' +
-'    background: #fbbf24;\n' +
-'    border: none;\n' +
-'    padding: 20px;\n' +
-'    border-radius: 50%;\n' +
-'    cursor: pointer;\n' +
-'    font-size: 24px;\n' +
-'    width: 80px;\n' +
-'    height: 80px;\n' +
-'    display: flex;\n' +
-'    align-items: center;\n' +
-'    justify-content: center;\n' +
-'    margin: 20px auto;\n' +
-'    transition: all 0.3s;\n' +
-'}\n' +
-'.play-button:hover {\n' +
-'    background: #f59e0b;\n' +
-'    transform: scale(1.1);\n' +
-'}\n' +
-'.info {\n' +
-'    margin-top: 20px;\n' +
-'    padding: 15px;\n' +
-'    background: rgba(15, 23, 42, 0.6);\n' +
-'    border-radius: 10px;\n' +
-'    font-size: 14px;\n' +
-'    max-width: 400px;\n' +
-'    word-wrap: break-word;\n' +
-'}\n' +
-'h1 {\n' +
-'    color: #fbbf24;\n' +
-'    margin-bottom: 10px;\n' +
-'}\n' +
-'p {\n' +
-'    color: #cbd5e1;\n' +
-'    margin: 10px 0;\n' +
-'}\n' +
+'body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:#000;}\n' +
+'.play-button{background:#f7f7f7;border:none;padding:10px;border-radius:50%;cursor:pointer;}\n' +
+'.play-button:hover{background:#999;}\n' +
 '</style>\n' +
 '</head>\n' +
 '<body>\n\n' +
-'<div class="container">\n' +
-'<h1>تشغيل الفيديو</h1>\n' +
-'<p>انقر على الزر أدناه لفتح الفيديو في تطبيق Vexo Player</p>\n' +
 '<a href="' + intent + '">\n' +
 '<button class="play-button">▶</button>\n' +
-'</a>\n' +
-'<div class="info">\n' +
-'<p><strong>العنوان:</strong> ' + decodeURIComponent(title) + '</p>\n' +
-'<p><strong>نظام DRM:</strong> ' + (scheme || 'بدون') + '</p>\n' +
-'</div>\n' +
-'</div>\n\n' +
+'</a>\n\n' +
 '<script>\n' +
-'// محاولة الفتح التلقائي بعد 1 ثانية\n' +
-'setTimeout(function(){\n' +
-'    window.location.href = "' + intent + '";\n' +
-'}, 1000);\n' +
-'\n' +
-'// فتح عند النقر على الزر\n' +
-'document.querySelector(".play-button").addEventListener("click", function() {\n' +
-'    window.location.href = "' + intent + '";\n' +
-'});\n' +
+'setTimeout(function(){location.href="' + intent + '";},800);\n' +
 '<\/script>\n\n' +
 '</body>\n</html>';
 
-    // عرض النتيجة
-    document.getElementById("out").value =
-        "🔗 رابط Intent:\n\n" +
-        intent +
-        "\n\n" +
-        "=".repeat(50) +
-        "\n\n📄 كود HTML كامل:\n\n" +
-        html;
+document.getElementById("out").value =
+"🔗 Intent Link:\n\n" +
+intent +
+"\n\n========================\n\n📄 HTML Page:\n\n" +
+html;
+}
+
+function generateWebLink(){
+var title = encodeURIComponent(
+  document.getElementById("title").value
+);
+
+var scheme = document.getElementById("scheme").value;
+
+var keyRaw = document.getElementById("key").value;
+var key = encodeURIComponent(keyRaw);
+
+var url = encodeURIComponent(
+  document.getElementById("url").value
+);
+
+// بناء رابط الويب
+var webLink = "https://3tto77-max.github.io/play/?" +
+"title=" + title +
+(scheme ? "&scheme=" + scheme : "") +
+(keyRaw ? "&key=" + key : "") +
+"&url=" + url;
+
+document.getElementById("out").value =
+"🔗 Web Link:\n\n" +
+webLink +
+"\n\n📋 رابط مباشر للاستخدام:\n" +
+webLink +
+"\n\n📋 رابط HTML للتضمين:\n" +
+'<a href="' + webLink + '">' + decodeURIComponent(title) + '</a>';
 }
 </script>
 
