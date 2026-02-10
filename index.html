@@ -1,196 +1,700 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vexo Generator</title>
-
-<style>
-body{
-margin:0;
-background:#0f172a;
-color:#fff;
-font-family:Cairo,Segoe UI,sans-serif;
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.box{
-background:#1e293b;
-padding:25px;
-border-radius:18px;
-width:95%;
-max-width:600px;
-box-shadow:0 20px 40px rgba(0,0,0,.5);
-}
-
-h1{color:#fbbf24;text-align:center}
-
-label{margin-top:12px;display:block}
-
-input,select{
-width:100%;
-padding:10px;
-border-radius:10px;
-border:none;
-margin-top:6px;
-font-size:14px;
-}
-
-.buttons{
-display:flex;
-gap:10px;
-margin-top:18px;
-}
-
-button{
-width:100%;
-padding:14px;
-border-radius:14px;
-border:none;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.btn-generate{
-background:#fbbf24;
-}
-
-.btn-web{
-background:#3b82f6;
-}
-
-textarea{
-margin-top:15px;
-width:100%;
-height:300px;
-background:#020617;
-color:#fbbf24;
-border:none;
-border-radius:12px;
-padding:12px;
-font-size:12px;
-resize:none;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vexo Generator Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #fbbf24;
+            --primary-dark: #f59e0b;
+            --secondary: #3b82f6;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--dark);
+            color: var(--light);
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .header h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+        
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        
+        @media (min-width: 768px) {
+            .app-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .form-section, .output-section {
+            background: var(--dark-light);
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-title {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            font-size: 1.2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--light);
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--light);
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .optional-badge {
+            display: inline-block;
+            background: rgba(148, 163, 184, 0.2);
+            color: var(--gray);
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 25px;
+        }
+        
+        @media (min-width: 576px) {
+            .buttons-container {
+                flex-direction: row;
+            }
+        }
+        
+        .btn {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--dark);
+            flex: 1;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(251, 191, 36, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-secondary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn i {
+            font-size: 1.1rem;
+        }
+        
+        .output-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .output-tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--primary);
+        }
+        
+        .tab-content {
+            flex: 1;
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .output-textarea {
+            width: 100%;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--primary);
+            font-family: monospace;
+            font-size: 0.9rem;
+            padding: 15px;
+            resize: none;
+            line-height: 1.5;
+        }
+        
+        .output-textarea.intent {
+            height: 150px;
+        }
+        
+        .output-textarea.html {
+            height: 300px;
+        }
+        
+        .copy-btn {
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .copy-btn.success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
 </head>
-
 <body>
-
-<div class="box">
-
-<h1>Vexo Generator</h1>
-
-<label>العنوان</label>
-<input id="title" value="بث مباشر">
-
-<label>Scheme</label>
-<select id="scheme">
-<option value="clearkey">ClearKey</option>
-<option value="widevine">Widevine</option>
-<option value="playready">PlayReady</option>
-<option value="">بدون</option>
-</select>
-
-<label>Key (keyId:keyValue)</label>
-<input id="key" value="ab12:cd34">
-
-<label>رابط الفيديو</label>
-<input id="url" value="https://example.com/video.mpd">
-
-<div class="buttons">
-<button class="btn-generate" onclick="generate()">توليد الرابط + HTML</button>
-<button class="btn-web" onclick="generateWebLink()">توليد رابط ويب</button>
-</div>
-
-<textarea id="out" readonly>سيظهر الناتج هنا...</textarea>
-
-</div>
-
-<script>
-function generate(){
-var title = encodeURIComponent(
-  document.getElementById("title").value
-);
-
-var scheme = document.getElementById("scheme").value;
-
-var keyRaw = document.getElementById("key").value;
-var key = encodeURIComponent(keyRaw);
-
-var url = encodeURIComponent(
-  document.getElementById("url").value
-);
-
-var intent =
-"intent://play?title=" + title +
-(scheme ? "&scheme=" + scheme : "") +
-(keyRaw ? "&key=" + key : "") +
-"&url=" + url +
-"#Intent;scheme=vexo;package=com.vexo.player;end";
-
-var html =
-'<!DOCTYPE html>\n' +
-'<html lang="en">\n' +
-'<head>\n' +
-'<meta charset="UTF-8">\n' +
-'<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'<title>Open Video in Vexo Player</title>\n' +
-'<style>\n' +
-'body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:#000;}\n' +
-'.play-button{background:#f7f7f7;border:none;padding:10px;border-radius:50%;cursor:pointer;}\n' +
-'.play-button:hover{background:#999;}\n' +
-'</style>\n' +
-'</head>\n' +
-'<body>\n\n' +
-'<a href="' + intent + '">\n' +
-'<button class="play-button">▶</button>\n' +
-'</a>\n\n' +
-'<script>\n' +
-'setTimeout(function(){location.href="' + intent + '";},800);\n' +
-'<\/script>\n\n' +
-'</body>\n</html>';
-
-document.getElementById("out").value =
-"🔗 Intent Link:\n\n" +
-intent +
-"\n\n========================\n\n📄 HTML Page:\n\n" +
-html;
-}
-
-function generateWebLink(){
-var title = encodeURIComponent(
-  document.getElementById("title").value
-);
-
-var scheme = document.getElementById("scheme").value;
-
-var keyRaw = document.getElementById("key").value;
-var key = encodeURIComponent(keyRaw);
-
-var url = encodeURIComponent(
-  document.getElementById("url").value
-);
-
-// بناء رابط الويب
-var webLink = "https://3tto77-max.github.io/play/?" +
-"title=" + title +
-(scheme ? "&scheme=" + scheme : "") +
-(keyRaw ? "&key=" + key : "") +
-"&url=" + url;
-
-document.getElementById("out").value =
-"🔗 Web Link:\n\n" +
-webLink +
-"\n\n📋 رابط مباشر للاستخدام:\n" +
-webLink +
-"\n\n📋 رابط HTML للتضمين:\n" +
-'<a href="' + webLink + '">' + decodeURIComponent(title) + '</a>';
-}
-</script>
-
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-play-circle"></i> Vexo Generator Pro</h1>
+            <p>أداة متكاملة لتوليد روابط تشغيل الفيديو في مشغل Vexo</p>
+        </div>
+        
+        <div class="app-container">
+            <!-- قسم الإدخال -->
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-edit"></i> إعدادات الرابط</h2>
+                
+                <div class="form-group">
+                    <label for="title">اسم الفيديو (Name) <span class="optional-badge">مطلوب</span></label>
+                    <input type="text" id="title" value="بث مباشر" placeholder="أدخل اسم الفيديو">
+                </div>
+                
+                <div class="form-group">
+                    <label for="url">رابط الفيديو (URL) <span class="optional-badge">مطلوب</span></label>
+                    <input type="text" id="url" value="https://example.com/video.mpd" placeholder="M3U, M3U8, TS, MP4, MPD...">
+                    <small style="color: var(--gray); font-size: 0.9rem; display: block; margin-top: 5px;">يدعم جميع صيغ الفيديو: M3U, M3U8, TS, MP4, MPD</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userAgent">وكيل المستخدم (User-Agent) <span class="optional-badge">اختياري</span></label>
+                    <input type="text" id="userAgent" placeholder="مثال: Mozilla/5.0 (Windows NT 10.0; Win64; x64)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="referer">المرجع (Referer) <span class="optional-badge">اختياري</span></label>
+                    <input type="text" id="referer" placeholder="مثال: https://example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="cookie">الكوكيز (Cookie) <span class="optional-badge">اختياري</span></label>
+                    <textarea id="cookie" placeholder="name=value; app=max; id=123..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="drmLicenseUrl">رخصة DRM (DRM License URL) <span class="optional-badge">اختياري</span></label>
+                    <input type="text" id="drmLicenseUrl" placeholder="رابط ترخيص DRM">
+                </div>
+                
+                <div class="form-group">
+                    <label for="origin">الأصل (Origin) <span class="optional-badge">اختياري</span></label>
+                    <input type="text" id="origin" placeholder="مثال: https://example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="scheme">نظام الحماية (DRM Scheme) <span class="optional-badge">اختياري</span></label>
+                    <select id="scheme">
+                        <option value="">بدون DRM</option>
+                        <option value="clearkey">ClearKey</option>
+                        <option value="widevine">Widevine</option>
+                        <option value="playready" selected>PlayReady</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="key">مفتاح التشفير (Key) <span class="optional-badge">اختياري</span></label>
+                    <input type="text" id="key" value="ab12:cd34" placeholder="keyId:keyValue">
+                    <small style="color: var(--gray); font-size: 0.9rem; display: block; margin-top: 5px;">الصيغة: معرف المفتاح:قيمة المفتاح</small>
+                </div>
+                
+                <div class="buttons-container">
+                    <button class="btn btn-primary" onclick="generateIntent()">
+                        <i class="fas fa-bolt"></i> توليد رابط Intent
+                    </button>
+                    <button class="btn btn-secondary" onclick="generateWebLink()">
+                        <i class="fas fa-globe"></i> توليد رابط ويب
+                    </button>
+                </div>
+            </div>
+            
+            <!-- قسم الإخراج -->
+            <div class="output-section">
+                <h2 class="section-title"><i class="fas fa-code"></i> الناتج</h2>
+                
+                <div class="output-container">
+                    <div class="output-tabs">
+                        <button class="tab active" data-tab="intent">رابط Intent</button>
+                        <button class="tab" data-tab="html">صفحة HTML</button>
+                        <button class="tab" data-tab="web">رابط الويب</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="intent-tab">
+                        <textarea class="output-textarea intent" id="intent-output" readonly>سيظهر رابط Intent هنا...</textarea>
+                        <button class="copy-btn" onclick="copyToClipboard('intent-output')">
+                            <i class="far fa-copy"></i> نسخ رابط Intent
+                        </button>
+                    </div>
+                    
+                    <div class="tab-content" id="html-tab">
+                        <textarea class="output-textarea html" id="html-output" readonly>سيظهر كود HTML هنا...</textarea>
+                        <button class="copy-btn" onclick="copyToClipboard('html-output')">
+                            <i class="far fa-copy"></i> نسخ كود HTML
+                        </button>
+                    </div>
+                    
+                    <div class="tab-content" id="web-tab">
+                        <textarea class="output-textarea intent" id="web-output" readonly>سيظهر رابط الويب هنا...</textarea>
+                        <button class="copy-btn" onclick="copyToClipboard('web-output')">
+                            <i class="far fa-copy"></i> نسخ رابط الويب
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Vexo Generator Pro &copy; 2023 | يدعم جميع إصدارات مشغل Vexo</p>
+        </div>
+    </div>
+    
+    <script>
+        // تبويبات الناتج
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // إزالة النشاط من جميع التبويبات
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // إضافة النشاط للتبويب المحدد
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+        
+        // دالة توليد رابط Intent
+        function generateIntent() {
+            // جمع القيم من الحقول
+            const title = encodeURIComponent(document.getElementById('title').value.trim());
+            const url = encodeURIComponent(document.getElementById('url').value.trim());
+            const userAgent = document.getElementById('userAgent').value.trim();
+            const referer = document.getElementById('referer').value.trim();
+            const cookie = document.getElementById('cookie').value.trim();
+            const drmLicenseUrl = document.getElementById('drmLicenseUrl').value.trim();
+            const origin = document.getElementById('origin').value.trim();
+            const scheme = document.getElementById('scheme').value;
+            const keyRaw = document.getElementById('key').value.trim();
+            
+            // بناء معلمات الرابط
+            const params = [
+                `title=${title}`,
+                `url=${url}`
+            ];
+            
+            // إضافة المعلمات الاختيارية إذا كانت موجودة
+            if (userAgent) params.push(`userAgent=${encodeURIComponent(userAgent)}`);
+            if (referer) params.push(`referer=${encodeURIComponent(referer)}`);
+            if (cookie) params.push(`cookie=${encodeURIComponent(cookie)}`);
+            if (drmLicenseUrl) params.push(`drmLicenseUrl=${encodeURIComponent(drmLicenseUrl)}`);
+            if (origin) params.push(`origin=${encodeURIComponent(origin)}`);
+            if (scheme) params.push(`scheme=${scheme}`);
+            if (keyRaw) params.push(`key=${encodeURIComponent(keyRaw)}`);
+            
+            // بناء رابط Intent
+            const intent = `intent://play?${params.join('&')}#Intent;scheme=vexo;package=com.vexo.player;end`;
+            
+            // بناء صفحة HTML
+            const html = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${document.getElementById('title').value.trim()}</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            font-family: 'Cairo', sans-serif;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            padding: 30px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+        h1 {
+            color: #fbbf24;
+            margin-bottom: 20px;
+        }
+        .play-btn {
+            background: #fbbf24;
+            color: #0f172a;
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        .play-btn:hover {
+            background: #f59e0b;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+        }
+        .info {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: right;
+        }
+        .info p {
+            margin: 8px 0;
+        }
+        .auto-open {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>${document.getElementById('title').value.trim()}</h1>
+        <p>انقر على الزر أدناه لفتح الفيديو في مشغل Vexo</p>
+        
+        <a href="${intent}" style="text-decoration: none; width: 100%; display: block;">
+            <button class="play-btn">
+                <i class="fas fa-play" style="font-size: 1.3rem;"></i> تشغيل الفيديو
+            </button>
+        </a>
+        
+        <div class="info">
+            <p><strong>اسم الفيديو:</strong> ${document.getElementById('title').value.trim()}</p>
+            ${scheme ? `<p><strong>نظام الحماية:</strong> ${scheme}</p>` : ''}
+        </div>
+        
+        <p class="auto-open">سيتم فتح التطبيق تلقائياً خلال 3 ثوانٍ...</p>
+    </div>
+    
+    <script>
+        // الفتح التلقائي بعد 3 ثوان
+        setTimeout(() => {
+            window.location.href = "${intent}";
+        }, 3000);
+        
+        // الفتح عند النقر على الزر
+        document.querySelector('.play-btn').addEventListener('click', () => {
+            window.location.href = "${intent}";
+        });
+    <\/script>
+</body>
+</html>`;
+            
+            // عرض النتيجة
+            document.getElementById('intent-output').value = intent;
+            document.getElementById('html-output').value = html;
+            
+            // عرض تبويب Intent
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('.tab[data-tab="intent"]').classList.add('active');
+            document.getElementById('intent-tab').classList.add('active');
+            
+            // إظهار رسالة نجاح
+            showToast('تم توليد رابط Intent بنجاح!', 'success');
+        }
+        
+        // دالة توليد رابط الويب
+        function generateWebLink() {
+            // جمع القيم من الحقول
+            const title = encodeURIComponent(document.getElementById('title').value.trim());
+            const url = encodeURIComponent(document.getElementById('url').value.trim());
+            const userAgent = document.getElementById('userAgent').value.trim();
+            const referer = document.getElementById('referer').value.trim();
+            const cookie = document.getElementById('cookie').value.trim();
+            const drmLicenseUrl = document.getElementById('drmLicenseUrl').value.trim();
+            const origin = document.getElementById('origin').value.trim();
+            const scheme = document.getElementById('scheme').value;
+            const keyRaw = document.getElementById('key').value.trim();
+            
+            // بناء معلمات الرابط
+            const params = [
+                `title=${title}`,
+                `url=${url}`
+            ];
+            
+            // إضافة المعلمات الاختيارية إذا كانت موجودة
+            if (userAgent) params.push(`userAgent=${encodeURIComponent(userAgent)}`);
+            if (referer) params.push(`referer=${encodeURIComponent(referer)}`);
+            if (cookie) params.push(`cookie=${encodeURIComponent(cookie)}`);
+            if (drmLicenseUrl) params.push(`drmLicenseUrl=${encodeURIComponent(drmLicenseUrl)}`);
+            if (origin) params.push(`origin=${encodeURIComponent(origin)}`);
+            if (scheme) params.push(`scheme=${scheme}`);
+            if (keyRaw) params.push(`key=${encodeURIComponent(keyRaw)}`);
+            
+            // بناء رابط الويب
+            const webLink = `https://3tto77-max.github.io/play/?${params.join('&')}`;
+            
+            // عرض النتيجة
+            document.getElementById('web-output').value = webLink;
+            
+            // عرض تبويب الويب
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('.tab[data-tab="web"]').classList.add('active');
+            document.getElementById('web-tab').classList.add('active');
+            
+            // إظهار رسالة نجاح
+            showToast('تم توليد رابط الويب بنجاح!', 'success');
+        }
+        
+        // دالة نسخ النص
+        function copyToClipboard(elementId) {
+            const textarea = document.getElementById(elementId);
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // للجوالات
+            
+            try {
+                const successful = document.execCommand('copy');
+                const copyBtn = textarea.nextElementSibling;
+                
+                if (successful) {
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> تم النسخ!';
+                    copyBtn.classList.add('success');
+                    
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i class="far fa-copy"></i> نسخ';
+                        copyBtn.classList.remove('success');
+                    }, 2000);
+                    
+                    showToast('تم نسخ النص إلى الحافظة!', 'success');
+                }
+            } catch (err) {
+                showToast('فشل في نسخ النص!', 'error');
+            }
+        }
+        
+        // دالة لعرض رسائل التنبيه
+        function showToast(message, type = 'info') {
+            // إنشاء عنصر التنبيه
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                font-weight: 600;
+                z-index: 1000;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            // إضافة إلى body
+            document.body.appendChild(toast);
+            
+            // إزالة بعد 3 ثوان
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+            
+            // إضافة أنيميشن
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // تعبئة الحقول بمثال توضيحي عند التحميل
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('userAgent').value = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36';
+            document.getElementById('referer').value = 'https://example.com';
+            document.getElementById('cookie').value = 'name=jo; app=max; id=123456';
+            document.getElementById('drmLicenseUrl').value = 'https://drm.example.com/license';
+            document.getElementById('origin').value = 'https://example.com';
+        });
+    </script>
 </body>
 </html>
